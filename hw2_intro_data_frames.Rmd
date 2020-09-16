@@ -75,7 +75,7 @@ TODO text for Q3
 
 ## 4
 
-Use your work above to implement the function below, and verify that it works for n = 100 and n = 50.
+> Use your work above to implement the function below. 
 
 ```{r}
 #' Plot the n most recent PM2.5 particle measurements on the y axis, with date as the x axis.
@@ -86,4 +86,10 @@ plot_pm2.5 = function(d, n = 100)
 {
   # TODO
 }
+```
+
+> Verify that `plot_pm2.5` works for `n = 100` and `n = 50`.
+
+```{r}
+TODO
 ```
