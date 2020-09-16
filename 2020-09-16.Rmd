@@ -1,0 +1,212 @@
+## Outcomes
+
+- create logical vectors using comparison operators
+- select rows by condition
+
+Before we can do this, we need to know about dates:
+
+- date class
+- format strings
+- conversion to dates
+- compare dates
+- update columns in place
+
+### Announcements
+
+- Today's online notes are more thorough, please use them in your homework.
+- HW graded
+
+123GO - what's your word of the day?
+
+### References
+
+- [Book of R, Section 5.2.3](https://learning.oreilly.com/library/view/the-book-of/9781492017486/xhtml/ch05.xhtml#ch05lev2sec54)
+- [Art of R Programming, Chapter 5](https://learning.oreilly.com/library/view/the-art-of/9781593273842/ch05s02.html#extracting_subdata_frames)
+
+
+## Dates
+
+```{r}
+air = read.csv("http://webpages.csus.edu/fitzgerald/files/stat128/fall20/ad_viz_plotval_data.csv")
+```
+
+In general, to select a subset of a data frame `data`
+```
+data[rows, columns]
+```
+
+Let's select columns
+
+```{r}
+d = air[, "Date"]
+pm2 = air[, "Daily.Mean.PM2.5.Concentration"]
+```
+
+Vector or data.frame?
+
+```{r}
+class(d)
+```
+
+plot pm2 as a function of date
+
+```{r}
+plot(d, pm2)
+```
+
+What happened here?
+We tried to plot strings and that doesn't make any sense.
+strings AKA character vectors
+
+```{r}
+head(d)
+```
+
+Let's convert to dates.
+```{r}
+d2 = as.Date(d, format = "%m/%d/%Y")
+
+class(d2)
+```
+
+123go - is it reasonable to plot dates on the x axis?
+Yes, this is a time series.
+
+```{r}
+plot(d2, pm2)
+```
+
+side note:
+function: input ----> output
+
+Did `d` change?
+No, it's still a character vector.
+`air` didn't change either.
+
+```{r}
+class(air[, "Date"])
+```
+
+To update the Date column in `air`:
+
+```{r}
+air[, "Date"] = as.Date(d, format = "%m/%d/%Y")
+```
+
+
+## logical comparisons
+
+Logical vectors are vectors where the value is either TRUE or FALSE (or NA, but that's for later).
+
+```{r}
+l1 = c(TRUE, TRUE, FALSE)
+```
+
+```{r}
+x = c(1, 2, 2, 3, 18)
+```
+
+I want to check which elements of x are equal to 2.
+
+```{r}
+x == 2
+```
+
+To save this logical vector into a variable called `isx2`:
+```{r}
+isx2 = x == 2
+
+isx2 <- x == 2
+```
+
+This means `=` (assignment) is TOTALLY different from `==` (equality comparison).
+
+Your turn:
+```{r}
+x
+x <= 2  # type in the chat, 123 go
+```
+
+```{r}
+d3 = head(d2)
+d3
+```
+
+To find the dates beyond January 12:
+```{r}
+as.Date("2020-01-12") < d3
+```
+
+To find the dates before January 12:
+
+```{r}
+as.Date("2020-01-12") > d3
+```
+
+## row selection
+
+We can select subsets of the data that we're interested in.
+
+```{r}
+x = c(TRUE, TRUE, FALSE, TRUE)
+x2 = c(TRUE, TRUE, TRUE, TRUE)
+
+any(x)
+any(x2)
+
+all(x)
+all(x2)
+```
+
+
+```
+data[rows, columns]
+```
+We can take a logical subset of rows- sometimes called filtering / query
+
+For example, to get the subset of rows that corresponds to "El Dorado" county.
+
+Technique:
+Build your query piece by pieces, such that every piece works and does what you expect.
+Test each piece.
+
+DO NOT: ~~just write something complicated and think it will work.~~
+
+step 1: Select the COUNTY vector from air
+
+```{r}
+air[, "COUNTY"]
+
+```
+step 2: Create a logical vector identifying "El Dorado"
+
+```{r}
+air[, "COUNTY"] == "El Dorado"
+```
+step 3: Select the rows from `air` that correspond.
+
+```{r}
+edc = air[, "COUNTY"] == "El Dorado"
+air2 = air[edc, ]
+```
+
+To test, I can look at all values of "COUNTY" in my `air2`.
+```{r}
+table(air2[, "COUNTY"])
+unique(air2[, "COUNTY"])
+```
+
+If I don't want to use intermediate variable:
+
+```{r}
+rows = air[, "COUNTY"] == "El Dorado"
+cols = c("COUNTY", "Date", "Daily.Mean.PM2.5.Concentration")
+air4 = air[rows, cols]
+air4
+```
+
+How many columns should `air4` have?
+
+
+
+

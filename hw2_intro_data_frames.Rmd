@@ -4,13 +4,13 @@ author: TODO
 date: 20 September 2020
 ---
 
-## Outcomes
+#### Outcomes
 
 - Select subsets of rows of data frames
 - Manipulate data frames, for example, defining columns and permuting rows
-- Create line plots and comparative boxplots
+- Create line plots and comparative boxplots `r format(pi, digits = 4)`.
 
-## Background
+#### Background
 
 Several [lightning fires](https://www.fire.ca.gov/incidents/2020/8/16/czu-lightning-complex-including-warnella-fire/) began after August 15th, 2020 in California. How did this affect air quality?
 
@@ -21,7 +21,7 @@ Some particles, such as dust, dirt, soot, or smoke, are large or dark enough to 
 PM2.5 : fine inhalable particles, with diameters that are generally 2.5 micrometers and smaller."
 In this assignment, we'll analyze data provided by the [EPA daily outdoor air quality](https://www.epa.gov/outdoor-air-quality-data/download-daily-data).
 
-## Instructions
+#### Instructions
 
 - Answer the following questions, and show all your R code.
 - Upload your submission to Canvas in nicely formatted HTML generated from Rstudio.
@@ -91,5 +91,5 @@ plot_pm2.5 = function(d, n = 100)
 > Verify that `plot_pm2.5` works for `n = 100` and `n = 50`.
 
 ```{r}
-TODO
+# TODO
 ```
