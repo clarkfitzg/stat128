@@ -1,0 +1,48 @@
+---
+title: Random Variables
+author: TODO
+date: 27 September 2020
+---
+
+#### Outcomes
+
+- Write user defined functions
+- compose user defined functions
+- vectorized functions?
+- Simulations?
+
+
+#### Background
+
+In statistics, a random variable is a function that maps an element of the sample space to a real number.
+In this assignment we'll practice writing random variables using the game of Roulette.
+
+A European roulette wheel has numbers 1-36 in red and black, and number 0 in green for a house win.
+The dealer spins the board, and the the ball lands randomly on one of these 37 numbers.
+Here's a brief [video introducing the rules of roulette](https://youtu.be/6nKBlWaRI8w).
+
+#### Instructions
+
+- Answer the following questions, and show all your R code.
+- Upload your submission to Canvas in nicely formatted HTML generated from Rstudio.
+
+# Questions
+
+We'll study the following bets:
+
+Outside:
+
+- red & black
+- evens & odds
+- high & low
+- columns
+
+## 1
+
+> 
+
+```{r}
+# TODO code for Q1
+```
+
+TODO text for Q1

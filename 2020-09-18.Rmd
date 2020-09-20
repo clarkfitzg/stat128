@@ -1,0 +1,156 @@
+
+- Implement a function given a description of what it should do
+- Describe R's formula syntax, `y ~ x`
+- Select rows of a data frame by index
+
+123GO - what's your dream job?
+
+Announcements:
+
+- For the homework, piece together parts from the lecture notes this week.
+- The standards for homework grading are high, to help you grow.
+- I'll provide an example of a submission that would earn a full score.
+
+Warm call start:
+
+```{r}
+students = readLines("~/Desktop/roster_stat128.txt")
+sample(students, 1)
+```
+
+## Defining Functions
+
+Q: What is a (mathematical) function?
+A: map from codomain ---> domain
+A:          input    ---> exactly one output
+
+Functions are the heart of R.
+
+Find the data point closest to the mean.
+
+```{r}
+diff_from_mean = abs(precip - mean(precip))
+closest_index = which.min(diff_from_mean)
+precip[closest_index]
+```
+
+Decide exactly how it should work.
+
+123GO come up with a simple example of inputs and outputs
+input: c()
+output:
+
+```{r}
+#' Find the data point closest to the mean.   # <-- Comment (optional)
+#
+closest_to_mean = function(x)                 # <-- name, arguments
+{                                           # <--- start of the body
+  print(class(x))
+  diff_from_mean = abs(x - mean(x))
+  closest_index = which.min(diff_from_mean)
+  x[closest_index]                # <--- last line is the return value
+}
+
+farthest_to_mean = function(x)                 # <-- name, arguments
+{                                           # <--- start of the body
+  diff_from_mean = abs(x - mean(x))
+  farthest_index = which.max(diff_from_mean)
+  x[farthest_index]                # <--- last line is the return value
+}
+```
+
+
+```{r}
+closest_to_mean(precip)
+closest_to_mean(c(0, 2.1, 4))    # 2.1 should be the output
+```
+
+SUCCESS!
+
+```{r}
+# Doesn't make sense.
+closest_to_mean(letters)
+```
+
+
+## Model Formulas
+
+`y ~ x` means "model y as a function of x"
+~ tilde "till - duh"
+
+```{r}
+?formula
+```
+
+
+```{r}
+air = read.csv("http://webpages.csus.edu/fitzgerald/files/stat128/fall20/ad_viz_plotval_data.csv")
+```
+
+`boxplot`
+```{r}
+boxplot(air[, "DAILY_AQI_VALUE"])
+```
+
+Let's look at groups by county.
+
+```{r}
+boxplot(DAILY_AQI_VALUE ~ COUNTY, data = air)
+```
+
+```{r}
+dav = air[, "DAILY_AQI_VALUE"]
+
+boxplot(dav)
+```
+
+
+```{r}
+boxplot(DAILY_AQI_VALUE ~ COUNTY, data = air)
+```
+
+Suppose I want to have 2 boxplots. One for Sacramento county, and one for everything else. How do I do this?
+
+```{r}
+air[, "sac"] = air[, "COUNTY"] == "Sacramento"
+# TRUE means the county is Sacramento
+
+# Original: boxplot(DAILY_AQI_VALUE ~ COUNTY, data = air)
+boxplot(DAILY_AQI_VALUE ~ sac, data = air, xlab = "Site is in Sacramento County")
+```
+
+
+## Selecting Rows by Index
+
+
+`table` will count up all different values in a contingency table.
+```{r}
+table(air[, c("COUNTY", "sac")])
+```
+
+
+```{r}
+r = sample(length(letters))
+r
+```
+
+
+```{r}
+letters[r]
+```
+
+
+We can reorder rows in our data set.
+
+```{r}
+plot(air[, "DAILY_AQI_VALUE"], type = "l")
+```
+
+
+```{r}
+air2 = air[order(air[, "DAILY_AQI_VALUE"]), ]
+
+plot(air2[, "DAILY_AQI_VALUE"], type = "l")
+```
+
+
