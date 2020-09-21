@@ -14,6 +14,7 @@ date: 27 September 2020
 #### Background
 
 In this assignment we'll practice writing random variables using the game of Roulette.
+We'll use them in the next assignment to analyze and understand the game.
 
 A European roulette wheel has numbers 1-36 in red and black, and number 0 in green for a house win.
 The dealer spins the board, and the the ball lands randomly on one of these 37 numbers.
