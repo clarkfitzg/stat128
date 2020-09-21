@@ -6,10 +6,9 @@ date: 27 September 2020
 
 #### Outcomes
 
-- Write user defined functions
-- compose user defined functions
-- vectorized functions?
-- Simulations?
+- Implement mathematical expressions in user defined functions
+- Write vectorized functions
+- Translate word problems and game rules into mathematics and code
 
 
 #### Background
@@ -36,7 +35,7 @@ x = sample(roulette_values, size = n, replace = TRUE)
 
 # Questions
 
-## 1
+## 1 - outside bet
 
 The elements of our sample space are the roulette numbers: {0, 1, ..., 36}.
 In statistics, a random variable is a function that maps an element of the sample space to a real number.
@@ -65,6 +64,7 @@ even = function(x)
 }
 ```
 
+
 ## 2
 
 Define a vectorized function `low` that accepts a sample vector `x` and returns the amount you win or lose if you bet one unit money on the low numbers, from 1 to 18.
@@ -74,8 +74,45 @@ Hint: you lose if X = 0.
 # TODO define low
 ```
 
-## 3 - inside bet
 
-Define a vectorized function `single` that accepts `x`, a sample vector, and `d`, a digit between  1 and 36, and returns the amount you win or lose in roulette if you bet one 
+## 3 - straight up
 
-TODO text for Q1
+Define a vectorized function `straightup` that accepts `x`, a sample vector, and `d`, a digit between  0 and 36, and returns the amount you win or lose in roulette if you bet one unit money on the single value `d`.
+
+```{r}
+# TODO define straightup
+```
+
+
+## 4 - something different
+
+Pick another possible roulette bet that does not have a 1 to 1 payout, and implement an appropriately named vectorized function that accepts `x`, and returns the amount you win or lose in roulette if you bet one unit of money on the single value `d`.
+Write it in mathematical notation below as f(x).
+
+$$
+f(x) = TODO
+$$
+
+```{r}
+# TODO implement function
+```
+
+
+## 5
+
+Calculate the expected value of your winnings after each play for each of the 4 betting strategies described above.
+It should be negative, because the house always wins.
+
+```{r}
+# 1
+# TODO
+
+# 2
+# TODO
+
+# 3
+# TODO
+
+# 4
+# TODO
+```
