@@ -69,7 +69,7 @@ SUCCESS!
 
 ```{r}
 # Doesn't make sense.
-closest_to_mean(letters)
+#closest_to_mean(letters)
 ```
 
 
@@ -149,6 +149,8 @@ plot(air[, "DAILY_AQI_VALUE"], type = "l")
 
 ```{r}
 air2 = air[order(air[, "DAILY_AQI_VALUE"]), ]
+
+plot(letters)
 
 plot(air2[, "DAILY_AQI_VALUE"], type = "l")
 ```

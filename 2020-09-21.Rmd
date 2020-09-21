@@ -1,0 +1,89 @@
+123 GO - what's your word of the day?
+
+- Write reproducible data analyses
+- Maintain consistency between written code and global environment
+- Ask precise questions about programming
+- Predict when variables will be available in function bodies and global environment
+
+Announcements:
+
+- Office hours catered to students new to programming
+  Fill this out right now!! https://www.when2meet.com/?9867200-mw54z
+- Glad to see more code and chatter in the Discord.
+    It's good to post your broken code here, so we can fix it.
+
+
+Resources:
+
+- Stack Overflow on [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example)
+
+[live notes](https://github.com/clarkfitzg/stat128/blob/master/2020-09-21.Rmd)
+
+
+## Sharing workflow tips in RStudio
+
+Workflow is __how__ you develop your programs.
+Workflow can make the difference between a pleasant experience and endless frustration.
+
+How are you currently using RStudio?
+
+In your small groups come up with:
+
+1. One workflow tip that works
+    1. Use Youtube
+    2. Trial and error
+    3. set your working directory, save all your stuff in one folder.
+    4. Clear global environment
+    5. print tables to make sure they look right!!!! <----
+    6. test code in blocks / chunks
+    7. use book as reference
+    8. write the code piece by piece, so that it always works
+2. One place where you have trouble with your workflow.
+    1. Need to learn shortcuts
+    2. Double check facts and assumptions (Only 30 days in June)
+    3. Clear global environment - be careful
+    4. Help documentation often not helpful!
+    5. understanding exactly what output to expect from a function
+    8. knowing when assignment to global environment will happen
+
+```{r}
+d = 10
+```
+
+```{r}
+d = "abc"
+```
+
+
+```{r}
+d + 1
+```
+
+
+## How to ask a precise question
+
+When asking questions, copy and paste the code and output that gives you trouble.
+Not a screenshot, unless you're asking about plots.
+For example...
+
+Example should be minimal, complete, and reproducible.
+
+
+## Reproducible data analyses
+
+Q: When you go to produce your final report, should it matter what you have in your global environment?
+
+123 GO - yes or no
+__NO__ 
+
+
+Q: Can you think of anything that should not be contained in the code, but rather kept private?
+
+
+
+## Function Scope
+
+
+
+### Globals
+
