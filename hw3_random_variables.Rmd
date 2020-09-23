@@ -36,6 +36,8 @@ x = sample(roulette_values, size = n, replace = TRUE)
 
 # Questions
 
+(4 points) general code quality across all questions.
+
 ## 1 - outside bet
 
 (3 points)
@@ -70,7 +72,7 @@ even = function(x)
 
 ## 2
 
-(3 points)
+(2 points)
 
 Define a vectorized function `low` that accepts a sample vector `x` and returns the amount you win or lose if you bet one unit money on the low numbers, from 1 to 18.
 Hint: you lose if X = 0.
@@ -93,9 +95,9 @@ Define a vectorized function `straightup` that accepts `x`, a sample vector, and
 
 ## 4 - something different
 
-(7 points)
+(5 points)
 
-Pick another possible roulette bet that does not have a 1 to 1 payout, and implement an appropriately named vectorized function that accepts `x`, and returns the amount you win or lose in roulette if you bet one unit of money on the single value `d`.
+Pick another possible roulette bet that does not have a 1 to 1 payout, and implement an appropriately named vectorized function that accepts `x`, and returns the amount you win or lose in roulette if the ball lands in `x`.
 Write it in mathematical notation below as f(x).
 
 $$
@@ -109,7 +111,7 @@ $$
 
 ## 5
 
-(4 points)
+(3 points)
 
 Calculate the expected value of your winnings after each play for each of the 4 betting strategies described above.
 It should be negative, because the house always wins.

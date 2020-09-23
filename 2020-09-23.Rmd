@@ -1,0 +1,196 @@
+---
+tags:
+    - stat128
+---
+
+Functions
+
+- Predict when variables will be available in function bodies and global environment
+- Determine whether a function is vectorized.
+
+Announcements:
+
+- Recall late policy on assignments.
+- Minor change to question on HW template just now
+
+123 GO - What's the last book you read?
+
+Assignment feedback
+
+- Many discovered the formula interface for `plot(y ~ x, data = d)`. 👍
+    Logical operators: `& |`
+- Only necessary to convert date column one time at the beginning of your analysis.
+    General principle: the less code, the better
+- Summaries are fine, but don't print long vectors.
+- Names should be semantically meaningful.
+    Picking good names is really hard!
+    descriptive: `roseville = air[..., ]`
+    not descriptive: `data, mydata`
+- Color should be semantically meaningful. We'll talk about color in graphs next week.
+- `x == "TRUE"` What does this do? How about this? `x == TRUE`
+
+```{r}
+x = 1:10
+smallx = x < 5
+smallx
+```
+
+You should never need to do this for a logical vector.
+```{r}
+smallx == TRUE
+```
+
+What does this do?
+Checks if smallx has the literal value "TRUE" by __coercing__ `smallx` to an object of class "character".
+```{r}
+smallx == "TRUE"
+```
+
+```{r}
+smallx2 = as.character(smallx)  # explicit coercion
+smallx2 == "TRUE"
+```
+
+
+```{r}
+letters == "a"
+```
+
+## Function Scope
+
+Define a function for 
+
+$$
+    f(x, a, y) = a * x + y
+$$
+
+```{r}
+axpy = function(x, a = 1, y = 0)  # Arguments, including defaults
+{   # <- Start of the body
+    a * x + y           # Last element of body is the return value
+}
+```
+
+123GO:
+
+```{r}
+axpy(x = 10, a = 5, y = 2)
+```
+
+What are the classes of the arguments that `axpy` accepts? Yes, numeric will work.
+What are the names of the arguments that `axpy` accepts? `x, a, y`.
+
+#### Argument Defaults
+
+```{r}
+axpy(x = 10, y = 2)
+```
+
+`a` defaulted to 1.
+
+```{r}
+axpy = function(x, a = 1, y = 0)
+{
+    print(a)
+    a * x + y
+}
+
+axpy(10, y = 2)
+
+# This will for a in global environment, and fail to find it.
+#print(a) # 123GO - will this work or not? It's outside of my function
+```
+
+
+```{r}
+head(trees)
+```
+
+`Girth` and `Height` make sense as variable names in the context of the `trees` data frame.
+```{r}
+with(trees, Girth + Height)
+```
+
+
+### Globals
+
+```{r}
+
+# z is global
+z = 100
+
+axpy = function(x, a = 1, y = 0)
+{
+    # x, a, y, are LOCAL to this function
+    a * x + y + z
+}
+
+axpy(10)
+```
+
+```{r}
+# Here air is a global variable.
+plot_n_recent = function(d, n = 50)
+{
+    d2 = air[]    
+}
+```
+
+Q: How can using global variables in our functions hurt us?
+
+Easy to lose track of what's going on!
+
+```{r}
+#' Return the data point in `x` closest to the mean of `x`.
+#'
+closest_to_mean = function(x)
+{   # x was precip, and I tried to change all appearance of precip to x
+    diff_from_mean = abs(x - mean(x))
+    closest_index = which.min(diff_from_mean)
+    precip[closest_index]            # <--- FORGOT TO CHANGE TO X!!!!!! }
+}
+``` 
+
+Using global variables in this way is one of the most common sources of errors.
+
+How to avoid?
+
+1. Specify and use default arguments, such as `n = 50`
+2. Use only global functions in your function body. For example, `abs`
+    Don't use data / actual values. Pass data in as arguments.
+    
+```{r}
+axpy = function(x, a = 1, y = 0)
+{
+    a * x + y
+}
+
+axpy()
+```
+
+
+### Vectorized functions
+
+Group activity: vectorized polynomial.
+
+$$
+f(x) = 2 * x^2 + 5*x + 100
+$$
+Vectorization means the function works elementwise.
+It makes your code clean and fast.
+
+```{r}
+f = function(x) 2 * x^2 + 5*x + 100
+
+#f(1)
+
+#f(1:10)
+
+x = 1:10
+ifelse(x < 5, 100, -pi)
+```
+
+
+
+
+
