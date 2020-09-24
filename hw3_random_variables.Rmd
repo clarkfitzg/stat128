@@ -87,6 +87,7 @@ Hint: you lose if X = 0.
 (3 points)
 
 Define a vectorized function `straightup` that accepts `x`, a sample vector, and `d`, a digit between  0 and 36, and returns the amount you win or lose in roulette if you bet one unit money on the single value `d`.
+Hint: The payout for a straight up bet is 35 to 1.
 
 ```{r}
 # TODO define straightup
