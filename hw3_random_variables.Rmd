@@ -113,7 +113,7 @@ $$
 
 (3 points)
 
-Calculate the expected value of your winnings after each play for each of the 4 betting strategies described above.
+Calculate the expected value of your winnings after a single game for each of the 4 betting strategies described above.
 It should be negative, because the house always wins.
 
 ```{r}
