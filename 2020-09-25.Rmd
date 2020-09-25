@@ -1,0 +1,375 @@
+Outcomes:
+
+- Reason about vectorized boolean computations
+- Explain difference between `TRUE` and `T`.
+
+Announcements:
+
+- You should be proud of yourselves for the last HW.
+- New programmer specific office hours after class today, all are welcome.
+
+123 GO - What's your word of the day?
+
+## boolean logic
+
+```{r}
+TRUE
+
+FALSE
+```
+
+
+### Negation
+
+`!x` does the logical negation of `x`.
+
+```{r}
+trues = c(TRUE, TRUE)
+falses = !trues
+!falses
+
+tf = c(TRUE, FALSE)
+```
+
+
+### AND OR
+
+
+- `A & B` returns TRUE when A and B are both TRUE, and FALSE otherwise.
+- `A | B` returns TRUE if any of A or B are TRUE, and FALSE otherwise.
+
+AND `&`
+```{r}
+tf & trues
+```
+
+123GO: 
+
+```{r}
+tf & falses
+```
+
+`|` logical OR
+
+```{r}
+tf | trues
+```
+
+For any value of `x` the following expression will always be `TRUE`:
+
+```{r}
+x = sample(tf, size = 300, replace = TRUE)
+y = x | TRUE
+all(y)
+```
+
+
+### Binary Operators
+
+Side note:
+`|` and `&` are examples of __binary operators__.
+
+Other binary operations include addition `+`, and multiplication, `*`.
+You can think of them as functions that take two arguments, and are usually called without parentheses in the syntax of a language as `x OP y`, rather than `OP(x, y)`.
+
+```{r}
+
+#1
+`&`(tf, trues)
+
+# Both do the same thing. Which is more readable?
+
+#2
+tf & trues
+```
+
+Logical negation using `!` operates on a single argument, so it's a __unary operator__.
+
+`!` sometimes called NOT, "bang"
+
+```{r}
+!tf
+```
+
+
+## Difference between `TRUE` and `T`
+
+```{r}
+class(TRUE)
+
+class(T)
+
+identical(T, TRUE)
+```
+
+You write simulation involving time.
+So you start at time 
+```{r}
+T = 0
+...
+```
+
+```{r}
+tf & TRUE
+```
+
+```{r}
+tf & T
+```
+
+The issue is that `T` is a variable name, that happens to be assigned to TRUE.
+`TRUE` is a string literal constant.
+
+```{r}
+TRUE = 0
+```
+
+```{r}
+?Reserved
+```
+
+Moral of the story: Always write `TRUE`.
+
+## Sequences of AND's and OR's
+
+123 GO
+What will this return?
+
+```{r}
+TRUE | TRUE & FALSE
+```
+
+I don't know, honestly.
+
+What can happen?
+
+If `|` is evaluated first.
+```{r}
+(TRUE | TRUE) & FALSE  # TRUE & FALSE which is FALSE
+```
+
+If `&` is evaluated first.
+```{r}
+TRUE | (TRUE & FALSE) # TRUE | FALSE which is TRUE
+```
+
+This implies that `&` happened first, before `|`.
+
+```{r}
+?Syntax
+```
+
+### Operator precedence
+
+
+
+Best practices:
+
+- Use parentheses to clarify.
+    That's what we did with `(TRUE | TRUE) & FALSE`.
+- Combine several conditions with exactly one of `|` and `&`.
+    If you do this, operator precedence doesn't matter.
+- Don't mix `&` and `|` in long logical expressions.
+
+```{r}
+x = 1:10
+x[(x <= 5) & (x != 2) & (1.6 < x) & (x != sqrt(pi))]
+```
+
+
+## Group activity
+
+`xor(x, y)` returns `TRUE` if exactly one of `x` and `y` is `TRUE`.
+As a group, use only `!, |, &` to implement a function `xor2` with this behavior.
+
+"Exclusive OR"
+```{r}
+xor(tf, trues)
+xor(tf, falses)
+
+xor2 = function(x, y)
+{
+  (x + y) == 1
+}
+```
+
+
+## homework hints
+
+I gave you this function in your homework template to illustrate some patterns you can use.
+
+`%%` called mod for modular arithmetic.
+`x %% y` is remainder when `x` is divided by `y`.
+
+```{r}
+even = function(x)
+{
+    win = (x %% 2 == 0) & (x != 0)
+    ifelse(win, 1, -1)
+}
+```
+
+To show this works
+
+```{r}
+s = 0:36
+even(s)
+```
+
+
+```{r}
+iseven = function(x) (x %% 2) == 0
+iseven(1:10)
+```
+
+`ifelse` is vectorized, operating elementwise.
+
+Expected value
+
+```{r}
+s = 0:36
+```
+
+For discrete RV with k possible outcomes
+$$
+E[X] = \sum_{i=1}^k p(X = x_i) * x_i
+$$
+
+Example:
+
+```{r}
+tb = table(even(s))
+
+-1 * (19/37) + 1 * (18/37)
+```
+
+Because (19/37) is the probability that this discrete random variable with two outcomes takes on the value -1.
+
+Manipulating the table:
+
+```{r}
+tb
+class(tb)
+```
+
+Suppose I want to extract 19 and 18
+
+```{r}
+as.numeric(tb)
+```
+
+Names of the table:
+
+```{r}
+class(names(tb))
+
+vals = as.numeric(names(tb))
+```
+
+
+```{r}
+x = 100
+f = function(x)
+{
+  x + 1
+}
+f(1)
+
+f(x)
+
+# First x refers to the one in the function body, the second to the global x
+f(x = x)
+```
+
+
+```{r}
+# group these together at the top of your program, it's easier to read.
+LINETYPE = "l"
+COLOR = "blue"
+
+plot_wrapper = function(x, y, linetype = LINETYPE)
+{
+  plot(x, y, type = linetype)
+}
+
+plot_wrapper(1:10, 1:10)
+```
+
+first dozen bet
+
+Corner cases: 0, 1, 12, 13, ...
+
+```{r}
+f(0) == -1
+f(1) == 2
+f(12) == 2
+f(13) == 2
+```
+
+
+$$
+f(x) =  \begin{cases}
+-1 &\mbox{if } x > 12 \\
+2 & \mbox{if } x \leq 12
+\end{cases}
+$$
+$$
+
+
+```{r}
+```
+
+
+Rocky's prime bet function:
+
+```{r}
+# This works on scalars
+is.prime0 <- function(n) n == 2L || all(n %% 2L:max(2,floor(sqrt(n))) != 0)
+
+is.prime <- function(n)
+{
+  ipv = Vectorize(is.prime0)  # A bit of a hack
+  if(1 < length(n)){
+    ipv(n)
+  } else {
+    is.prime0(n)
+  }
+}
+
+d = data.frame(n = 0:36, prime = is.prime(0:36))
+
+
+prime = function(x)
+{
+  win = is.prime(x) == TRUE
+  ifelse(win,1,-1)
+}
+```
+
+
+The amount you win or lose.
+Place $10 on a bet that pays 5:1.
+If you win: you get 5 * (bet amount) = 5 * 10 = $50.
+If you lose: you lose $10.
+
+Playing roulette:
+
+Bet $1 on lows.
+Ball hits the 22.
+Then you lose $1.
+
+Bet $1 on lows.
+Ball hits the 12.
+Then you win $1.
+
+Bet $1 on first dozen, with payout 2:1.
+Ball hits the 12.
+Then you win $2.
+
+Anytime you bet on the first dozen, you either lose $1, or you win $2.
+
+```{r}
+ifelse(win_firstdozen, 2, -1)
+```
+
+
