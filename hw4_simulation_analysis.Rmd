@@ -16,6 +16,8 @@ As promised, in this assignment we will use the functions representing random va
 
 #### Instructions
 
+- Don't be constrained by the questions.
+    If you want to ask something deeper, then go for it!
 - Answer the following questions, and show all your R code.
 - Upload your submission to Canvas in nicely formatted HTML generated from Rstudio.
 
@@ -64,9 +66,8 @@ play = function(strategy = simple_strategy()
     , nplayers = 100L
     , ntimes = 1000L
     , ballvalues = 0:36
-    , ...
 ){
-    replicate(nplayers, strategy(sample(ballvalues, size = ntimes, replace = TRUE), ...))
+    replicate(nplayers, strategy(sample(ballvalues, size = ntimes, replace = TRUE)))
 }
 ```
 
@@ -82,7 +83,7 @@ play = function(strategy = simple_strategy()
 library(ggplot2)
 theme_set(theme_bw())  # Feel free to set different themes
 
-set.seed(8913) # Starts the random number generator at a particular place, so the graph will look the same for everyone.
+set.seed(893) # Starts the random number generator at a particular place, so the graph will look the same for everyone.
 ntimes = 20
 d = data.frame(time = seq(ntimes))
 s = simple_strategy(even)
@@ -90,7 +91,7 @@ d$winnings = play(s, nplayers = 1, ntimes = ntimes)
 
 g = ggplot() + labs(title = "Single game of roulette", caption = "Simulated winnings over time for a single roulette player betting one dollar on evens every time.")
 g = g + geom_line(aes(time, winnings), data = d)
-g
+print(g)
 ```
 
 > One fun visualization is to draw many partially overlapping opaque lines, with each line representing a sequence of winnings by a single player.
@@ -100,7 +101,7 @@ g
 > - A line for the actual simulated average won by each player at each point in time
 > - Labeled vertical and horizontal lines representing typical player behavior, or casino betting limits.
 > 
-> Comment on your visualization.
+> Comment on your visualization(s).
 > What does it show?
 > What questions does it answer?
 
@@ -137,7 +138,7 @@ doublebet = function(x, initialbet = 1, strategy = even)
 }
 ```
 
-> `doublebet` implements the basic martingale doubling strategy (very inefficiently 😬, but that's fine).
+> `doublebet` implements the basic martingale doubling strategy (very inefficiently 😬, but that's fine for now).
 > Describe in detail what this function does, and how you believe it works.
 > What are the arguments?
 > What kind of objects makes sense to pass in as arguments?
@@ -156,16 +157,25 @@ m$winnings = play(doublebet, nplayers = 1, ntimes = ntimes)
 
 g = ggplot() + labs(title = "The Martingale Strategy in Roulette", caption = "Simulated winnings over time for a single roulette player following the basic martingale betting strategy.")
 g = g + geom_line(aes(time, winnings), data = m)
-g
+print(g)
 ```
 
 > Simulate and investigate different scenarios to create at least one visualization of the martingale strategy.
 > Comment on your visualization(s) and address the following.
+>
 > 1. Under what assumptions does the martingale strategy work in theory?
 > 2. Could the martingale strategy work in practice, given table limits?
+> 3. Is it good or bad for casinos if players use the martingale strategy?
+>       Does it depend on whether the casino is large or small?
 
 ```{r}
 # TODO create visualization(s)
 ```
 
 TODO explain visualization(s)
+
+
+## 4 - Advising a friend
+
+> Suppose someone you care about is going to visit Las Vegas, and is enthusiastic about the martingale strategy, but they have no background in math and logic.
+> Explain to this person, in simple terms, what the best strategy is for them to play roulette and why.
