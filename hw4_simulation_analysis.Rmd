@@ -67,8 +67,16 @@ play = function(strategy = simple_strategy()
     , ntimes = 1000L
     , ballvalues = 0:36
 ){
-    replicate(nplayers, strategy(sample(ballvalues, size = ntimes, replace = TRUE)))
+    out = replicate(nplayers
+            , strategy(sample(ballvalues, size = ntimes, replace = TRUE))
+            , simplify = FALSE
+    )
+    data.frame(winnings = do.call(c, out)
+            , player = rep(seq(nplayers), each = ntimes)
+            , time = rep(seq(ntimes), times = nplayers)
+    )
 }
+
 ```
 
 
@@ -84,13 +92,11 @@ library(ggplot2)
 theme_set(theme_bw())  # Feel free to set different themes
 
 set.seed(893) # Starts the random number generator at a particular place, so the graph will look the same for everyone.
-ntimes = 20
-d = data.frame(time = seq(ntimes))
-s = simple_strategy(even)
-d$winnings = play(s, nplayers = 1, ntimes = ntimes)
+d20 = play(nplayers = 1, ntimes = 20)
 
-g = ggplot() + labs(title = "Single game of roulette", caption = "Simulated winnings over time for a single roulette player betting one dollar on evens every time.")
-g = g + geom_line(aes(time, winnings), data = d)
+g = ggplot(data = d20, mapping = aes(x = time, y = winnings)) +
+    geom_line() +
+    labs(title = "Single game of roulette", caption = "Simulated winnings over time for a single roulette player betting one dollar on evens every time.")
 print(g)
 ```
 
@@ -151,12 +157,11 @@ TODO: explain `doublebet`.
 > We can simulate from the martingale strategy as follows.
 
 ```{r, echo = FALSE}
-ntimes = 30
-m = data.frame(time = seq(ntimes))
-m$winnings = play(doublebet, nplayers = 1, ntimes = ntimes)
+dm = play(doublebet, nplayers = 1, ntimes = 30)
 
-g = ggplot() + labs(title = "The Martingale Strategy in Roulette", caption = "Simulated winnings over time for a single roulette player following the basic martingale betting strategy.")
-g = g + geom_line(aes(time, winnings), data = m)
+g = ggplot(data = dm, mapping = aes(x = time, y = winnings)) +
+    geom_line() +
+    labs(title = "The Martingale Strategy in Roulette", caption = "Simulated winnings over time for a single roulette player following the basic martingale betting strategy.")
 print(g)
 ```
 
