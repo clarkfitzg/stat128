@@ -1,0 +1,33 @@
+
+123 GO - One word summarizing your feeling of the 2020 presidential election.
+
+Announcements:
+
+- I notice and appreciate everyone helping on the Discord forum
+- Read this excellent [intro to ggplot2](https://r4ds.had.co.nz/data-visualisation.html), that's what we'll cover on Friday
+- 
+
+Agenda:
+
+1. (20 min) Finish visualization slides
+2. (5 min) background visualization homework
+3. (10 min) Group discussion - gambling schemes!
+4. (5 min) Share 
+5. (Remaining) Explain code in HW template
+
+
+Gambling Schemes
+- Two bets every time.
+- Spread $1 throughout the inner
+- Counting cards!
+- Quit while you're up.
+- Go with 50/50 odds, little house advantage.
+- Increase bet if you win, 
+
+Questions
+
+
+
+
+
+

@@ -44,7 +44,7 @@ column1 = function(x)
 }
 
 
-straightup = function(x, d = 1)
+straightup = function(x, d = 3)
 {
     ifelse(x == d, 35, -1)
 }
@@ -91,13 +91,22 @@ play = function(strategy = simple_strategy()
 library(ggplot2)
 theme_set(theme_bw())  # Feel free to set different themes
 
-set.seed(893) # Starts the random number generator at a particular place, so the graph will look the same for everyone.
-d20 = play(nplayers = 1, ntimes = 20)
+set.seed(1234) # Starts the random number generator at a particular place, so the graph will look the same for everyone.
+
+ntimes = 1000
+expected = data.frame(time = seq(ntimes))
+expected$winnings = -0.027 * expected$time 
+
+d20 = play(simple_strategy(straightup), nplayers = 1, ntimes = ntimes)
 
 g = ggplot(data = d20, mapping = aes(x = time, y = winnings)) +
-    geom_line() +
-    labs(title = "Single game of roulette", caption = "Simulated winnings over time for a single roulette player betting one dollar on evens every time.")
+    geom_step() +
+    labs(title = "Single game of roulette", caption = "Simulated winnings over time for a single roulette player betting one dollar every time.")
+
+g = g + geom_line(data = expected, alpha = 0.3, color = "blue")
+
 print(g)
+
 ```
 
 > One fun visualization is to draw many partially overlapping opaque lines, with each line representing a sequence of winnings by a single player.
@@ -118,7 +127,7 @@ print(g)
 TODO explain visualization(s)
 
 
-## 1 - Martingale strategy
+## 2 - Martingale strategy
 
 > The simplest [martingale strategy](https://en.wikipedia.org/wiki/Martingale_(betting_system)) for betting on a game with nearly equal chances of win and loss is to start with the minimum bet, and then double your previous bet every time you lose.
 > If you win, then you again start fresh by betting the minimum amount.
@@ -160,7 +169,7 @@ TODO: explain `doublebet`.
 dm = play(doublebet, nplayers = 1, ntimes = 30)
 
 g = ggplot(data = dm, mapping = aes(x = time, y = winnings)) +
-    geom_line() +
+    geom_step() +
     labs(title = "The Martingale Strategy in Roulette", caption = "Simulated winnings over time for a single roulette player following the basic martingale betting strategy.")
 print(g)
 ```
@@ -184,3 +193,21 @@ TODO explain visualization(s)
 
 > Suppose someone you care about is going to visit Las Vegas, and is enthusiastic about the martingale strategy, but they have no background in math and logic.
 > Explain to this person, in simple terms, what the best strategy is for them to play roulette and why.
+
+```{r}
+set.seed(1234) # Starts the random number generator at a particular place, so the graph will look the same for everyone.
+
+ntimes = 100
+expected = data.frame(time = seq(ntimes))
+expected$winnings = -0.027 * expected$time 
+
+d = play(simple_strategy(even), nplayers = 4, ntimes = ntimes)
+
+g = ggplot(data = d, mapping = aes(x = time, y = winnings)) +
+    geom_line(aes(group = player)) +
+    labs(title = "Single game of roulette", caption = "Simulated winnings over time for a single roulette player betting one dollar every time.")
+
+g = g + geom_line(data = expected, alpha = 0.3, color = "blue")
+
+print(g)
+```

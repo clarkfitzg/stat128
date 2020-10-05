@@ -1,0 +1,52 @@
+
+- Compare and contrast special values `Inf`, `NaN`, `NA`, `NULL`
+- Predict propagation of `NA` through vectorized operations
+- Test for presence of special values
+
+Announcements:
+
+- Data science career panel coming up next Friday.
+
+
+## `Inf`
+
+
+
+## `NaN`
+
+
+
+## `NA`
+
+
+
+## Imputing missing values
+
+
+
+## `NULL`
+
+
+
+## Testing for special values
+
+
+
+
+## Other special values
+
+
+
+## Summary
+
+
+Sometimes arithmetic doesn't work out.
+If this happens, then we might get one of the numeric special values.
+
+- `Inf` means infinity
+- `NaN` means "Not a Number"
+
+There are two other more general special values.
+
+- `NA` represents missing values in a vector
+- `NULL` is a placeholder for ambiguous objects

@@ -1,0 +1,242 @@
+
+Outcomes:
+
+- Create data visualizations using ggplot2
+- Explain the idea of declarative graphics
+
+References:
+
+- [R for Data Science Visualization chapter](https://r4ds.had.co.nz/data-visualisation.html)
+
+
+## ggplot2 philosophy
+
+
+Structure of data is **vital** for ggplot2.
+Your data must be a data frame, with variables in columns- that's how it works.
+
+
+## Examples
+
+Code from template
+
+```{r}
+even = function(x)
+{
+    win = (x %% 2 == 0) & (x != 0)
+    ifelse(win, 1, -1)
+}
+
+
+# only accepts 1 argument, x
+column1 = function(x)
+{
+    ifelse(x %% 3 == 1, 2, -1)
+}
+
+
+# accepts two arguments, x and d
+# d has a default of 1.
+straightup = function(x, d = 1)   # <--
+{
+    ifelse(x == d, 35, -1)
+}
+
+
+# Construct a simple betting strategy
+simple_strategy = function(bet = even)
+{
+    function(x) cumsum(bet(x))
+}
+
+
+#' Simulate plays from a betting strategy
+#'
+#' @param strategy
+#' @param nplayers number of players to use this strategy
+#' @param ntimes number of times each player should play
+play = function(strategy = simple_strategy()
+    , nplayers = 100L
+    , ntimes = 1000L
+    , ballvalues = 0:36
+){
+    out = replicate(nplayers
+            , strategy(sample(ballvalues, size = ntimes, replace = TRUE))
+            , simplify = FALSE
+    )
+    data.frame(winnings = do.call(c, out)
+            , player = rep(seq(nplayers), each = ntimes)
+            , time = rep(seq(ntimes), times = nplayers)
+    )
+}
+```
+
+
+## loading a package
+
+Now we can get into the plotting code.
+Before we can use ggplot2 we need to load the package with `library`.
+
+```{r}
+#install.packages("ggplot2")
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+## generate data
+
+```{r}
+class(even)
+```
+
+
+```{r}
+set.seed(8930)
+TIMES = 20L
+d = play(strategy = simple_strategy(even)
+         , nplayers = 1, ntimes = TIMES)
+head(d)
+```
+
+
+## building a plot
+
+```{r}
+g = ggplot(data = d, mapping = aes(x = time, y = winnings))
+class(g)
+```
+
+```{r}
+print(g)
+```
+
+
+123 GO - what element are we missing?
+Three elements are required for any ggplot:
+
+1. data
+2. mapping
+3. geom
+
+
+## `+` at end of line
+
+```{r}
+g = ggplot(data = d, mapping = aes(x = time, y = winnings)) + 
+    geom_point()
+```
+
+
+## compare to default `plot`
+
+```{r}
+with(d, plot(time, winnings))
+```
+
+123 go - which appears to be simpler?
+
+`geom_step`
+
+```{r}
+g = ggplot(data = d, mapping = aes(x = time, y = winnings)) + 
+    geom_step()  # example of a high level graphical description
+```
+
+
+## More data
+
+Suppose we want to compare multiple betting strategies by drawing two lines on the same plot.
+We need more data.
+
+```{r}
+dc = play(strategy = simple_strategy(column1)
+          , nplayers = 1, ntimes = 30)
+
+```
+
+Let's add a column describing the strategy.
+
+```{r}
+d$strategy = "even"
+dc$strategy = "column"
+
+# stack d and dc on top of each other
+d2 = rbind(d, dc)
+
+# puts d and dc side by side
+#d3 = cbind(d, dc)
+```
+
+
+```{r}
+a = data.frame(x = 1:3)
+b = data.frame(x = 4:6)
+rbind(a, b)
+cbind(a, b)
+```
+
+
+```{r}
+g = ggplot(data = d2, mapping = aes(x = time, y = winnings)) + 
+    geom_line()
+print(g)
+```
+
+Split the lines into groups by strategy, group by the column named `strategy`
+
+```{r}
+g = ggplot(data = d2, mapping = aes(x = time, y = winnings)) + 
+    geom_line(aes(group = strategy))
+print(g)
+```
+
+Color the lines according to the values of the `strategy` column.
+
+```{r}
+g = ggplot(data = d2, mapping = aes(x = time, y = winnings)) + 
+    geom_line(aes(color = strategy))
+print(g)
+```
+
+`aes` for aesthetic
+
+```{r}
+g = ggplot(data = d2, mapping = aes(x = time, y = winnings)) + 
+    geom_step(mapping = aes(color = strategy))
+print(g)
+```
+
+
+
+
+
+
+```{r}
+r = 0:6
+straightup(r, d = 2)
+```
+
+Pick random `d` every time.
+
+```{r}
+dr = sample(0:36, size = length(r), replace = TRUE)
+dr
+straightup(r, d = dr)
+```
+
+What does `replace = TRUE` do?
+
+```{r}
+sample(1:10, size = 20, replace = TRUE)
+```
+
+```{r}
+sample(1:10, size = 10, replace = FALSE)
+```
+
+
+`d` had 20 rows, `dc` has 30 rows.
+```{r}
+e = rbind(d, dc, d, d)
+```
+
