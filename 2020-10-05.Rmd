@@ -1,40 +1,188 @@
 
+
 - Compare and contrast special values `Inf`, `NaN`, `NA`, `NULL`
 - Predict propagation of `NA` through vectorized operations
 - Test for presence of special values
 
 Announcements:
 
+- Visualization discussion assignment 
+- Peer reviews for last homework
+  - at least 1 positive comment, 1 idea for improvement
 - Data science career panel coming up next Friday.
 
+123 GO - What kind of data set sounds most interesting to you today?
+  Air quality / fire, Politics, polls, police violence, finance, etc.
+
+Note - Maybe finance and time series?
 
 ## `Inf`
 
+`1/x`
 
+```{r}
+curve(1/x)
+```
+
+```{r}
+1/0
+```
+
+> The basic rule should be that calls and relations with Infs really are statements with a proper mathematical limit.
+
+123 GO
+```{r}
+Inf + 1
+2 * Inf
+-1 * Inf
+mean(c(Inf, 1, 2, 3))
+1/Inf
+```
+
+If a value is infinite, it can __propagate__ through further operations.
 
 ## `NaN`
 
+```{r}
+Inf / Inf
+```
+
+`NaN` stands for "Not a Number"
+
+```{r}
+0 / 0
+```
+
+```{r}
+NaN + 1
+2 * NaN
+-1 * NaN
+mean(c(NaN, 1, 2, 3))
+1/NaN
+```
 
 
 ## `NA`
 
+```{r}
+head(airquality)
+```
+`NA` means the value in a vector is missing.
+
+```{r}
+class(airquality$Ozone)
+```
+
+`NA` is R's "killer feature".
+R handles `NA` in everything that it does, and this is very valuable for data analysis.
+
+```{r}
+NA + 1
+2 * NA
+-1 * NA
+mean(c(NA, 1, 2, 3))
+1/NA
+```
+
+`rm` in R means remove.
+
+```{r}
+mean(c(NA, 1, 2, 3), na.rm = TRUE)
+```
+
+```{r}
+x = c(NA, 1, 2, 3)
+x
+```
+
+Select values of `x` that are not NA
+```{r}
+is.na(x)
+x[!is.na(x)]
+mean(x[!is.na(x)])
+```
 
 
 ## Imputing missing values
 
+Imputing means to "fill in" missing values
+
+```{r}
+x[is.na(x)] = 0
+x
+```
+
+An easy way to impute is to put the mean value in.
+
+```{r}
+a = airquality$Ozone
+a[is.na(a)] = mean(a, na.rm = TRUE)
+a
+```
 
 
 ## `NULL`
+
+What kind of object should `p` be?
+
+```{r}
+p = plot(1:10)
+```
+
+We need an object for a placeholder when we're not sure what the object should be.
+
+```{r}
+p
+```
+
+Why is `NULL` useful?
+
+- Initiate variables / fill values
+- Test for it, and handle it.
+
+```{r}
+is.null(p)
+```
 
 
 
 ## Testing for special values
 
+```{r}
+x[1] = NA
+x
+```
+
+What's wrong with this?
+
+```{r}
+x == 1
+
+x == NA
+```
+
+```{r}
+x[1] = NULL
+x
+```
 
 
 
 ## Other special values
 
+```{r}
+x = numeric()
+x
+length(x)
+```
+
+```{r}
+s = ""
+s
+
+s2 = c("", "abc", "hello")
+s2
+```
 
 
 ## Summary
@@ -48,5 +196,5 @@ If this happens, then we might get one of the numeric special values.
 
 There are two other more general special values.
 
-- `NA` represents missing values in a vector
+- `NA` represents missing values in a vector, they usually show up when you load your data.
 - `NULL` is a placeholder for ambiguous objects
