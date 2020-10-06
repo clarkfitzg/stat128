@@ -19,13 +19,16 @@ date: 11 October 2020
 Download the [COVID-19 Case Surveillance Public Use Data](https://data.cdc.gov/Case-Surveillance/COVID-19-Case-Surveillance-Public-Use-Data/vbim-akqf) from the US Center for Disease Control (CDC).
 Click on the "Export" button in the top right corner next to download the actual data set.
 
+_Hint: It might be useful to create a new numeric column for severity based on the values of the `hosp, icu, death` columns.
+If you do this, make sure you explain the meaning and rationale behind your choices._
+
 
 # Questions
 
 ## 1 - Reading the Documentation
 
 _a) Describe this data set at a high level.
-    What does each row mean?_
+What does each row represent?_
 
 TODO - your answer
 
@@ -57,6 +60,10 @@ TODO - your answer
 
 _The [CDC states](https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/older-adults.html) "Among adults, the risk for severe illness from COVID-19 increases with age, with older adults at highest risk."
 Does the data support this claim?_
+
+_Hint 1: It might be useful to think about these COVID illness rates by age after adjusting     for the relative sizes of each age group in the country.
+You'll need to bring in another data source to do this._
+
 
 ```{r}
 # TODO
