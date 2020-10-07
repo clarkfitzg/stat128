@@ -1,0 +1,145 @@
+
+123 GO - what's your word of the day?
+
+- Create and interpret contingency tables
+- Create and interpret interaction plots
+
+Announcements:
+
+- Homework is posted.
+- Data set is about 400 MB, let me know if your computer starts going super slow.
+
+If your computer is slow:
+
+1. Close other programs, like your web browser
+2. Load a subset of the data
+
+
+## Categorical Data
+
+Categorical data usually has a handful of distinct levels.
+For examples, colors.
+R uses __factors__ to represent categorical data.
+
+```{r}
+colors = c("red", "blue", "green")
+class(colors)
+c2 = factor(colors)
+c2
+```
+
+```{r}
+ed = c("HS", "BA", "MS", "PHD")
+edf = factor(ed)
+```
+
+`factor` constructs factors from character vectors.
+
+Sometimes we have ordered factors.
+
+It makes sense to compare ordered factors.
+
+```{r}
+edo = factor(ed, levels = ed, ordered = TRUE)
+
+edo[1] < edo[4]
+
+# Not meaningful
+# edf[1] < edf[4]
+```
+
+Suppose we would like to make the continous data in x into a factor.
+How can we do this?
+
+```{r}
+x = seq(from = 1.5, to = 10, length.out = 100)
+xf = factor(x)
+x2 = as.numeric(xf)
+x3 = as.numeric(as.character(xf))
+```
+
+Side note: be very careful with equality comparison for floating point numbers.
+
+```{r}
+# Incorrect
+head(x) == head(x3)
+
+# Right way
+epsilon = 1e-14
+abs(head(x) - head(x3)) < epsilon
+```
+
+```{r}
+cx = cut(x, breaks = 1:10)
+```
+
+
+## Contingency tables
+
+```{r}
+# Default on a mac
+covid = read.csv("~/Downloads/COVID-19_Case_Surveillance_Public_Use_Data.csv")
+
+# I use "~/data" as my directory, because that's where I keep large data sets.
+covid = read.csv("~/data/COVID-19_Case_Surveillance_Public_Use_Data.csv")
+```
+
+What kind of data is `age_group`?
+Is it a factor? - 123GO
+Conceptually, yes, it is a factor
+
+```{r}
+table(covid$age_group)
+head(covid$age_group)
+
+class(covid$age_group)
+```
+
+```{r}
+table(covid$medcond_yn)
+```
+
+Suppose you want to look at a table with both age group and medical condition.
+
+Contingency table:
+```{r}
+tam = table(covid[, c("age_group", "sex")])
+
+plot(tam)
+```
+
+
+## Response and predictors
+
+Many models in statistics and machine learning are based on the idea of using one or more variables to predict a different variable of interest, called the __response__.
+
+Hospitalization
+
+```{r}
+table(covid$hosp_yn)
+class(covid$hosp_yn)
+covid$hospital = as.numeric(covid$hosp_yn == "Yes")
+```
+
+Goal: model hospitalization as a function of age and sex
+
+```{r}
+with(covid,
+     interaction.plot(age_group, sex, hospital)
+     )
+```
+
+
+## Interaction plots
+
+In statistics, an __interaction effect__ is when two or more variables have a non additive effect in the value of some response.
+
+
+
+## Group Activity
+
+Discuss in your groups, and come up with examples of:
+
+1) unordered categorical variable
+2) ordered categorical variable
+3) two variables that may well have an interaction effect in producing a response
