@@ -130,6 +130,13 @@ with(covid,
 ```
 
 
+Severity of covid 19:
+
+- 0 no hospitalization
+- 1 hospital
+- 2 ICU
+- 3 died
+
 ## Interaction plots
 
 In statistics, an __interaction effect__ is when two or more variables have a non additive effect in the value of some response.

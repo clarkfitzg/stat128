@@ -1,0 +1,195 @@
+123 GO - what's your dream vehicle?
+
+- Statistical models often try to estimate a response based on several predictors
+
+Last homework:
+
+- Going to change rubric
+- General goal in statistics is to uncover general patterns and variance, and that's not really possible with just one observation.
+
+## Statistical models
+
+Often: want to estimate f, given observations of X and y
+
+y ≅ f(X)
+
+names for X - Predictors, variables, input
+
+names for y - response, output, 
+
+~~endogeneous exogeneous~~
+
+
+## Interaction plots
+
+In statistics, an __interaction effect__ is when two or more variables have a non additive effect in the value of some response.
+
+One way to understand a model is to simulate it, so you can code in the exact assumptions of the model, and see what the results look like.
+These have the advantage of being self contained too.
+
+```{r}
+#alcohol = 0:4
+alcohol = c(3, 1, 0, 4, 2)
+distractor = factor(c("None", "Hamburger", "Cell Phone"))
+d = data.frame(alcohol = rep(alcohol, each = length(distractor)))
+d$distractor = rep(distractor, times = length(alcohol))
+
+d$prob_accident = 0
+d$prob_accident = 0.02 * d$alcohol
+cp = d$distractor == "Cell Phone"
+d$prob_accident[cp] = d$prob_accident[cp] + 0.03
+
+hb = d$distractor == "Hamburger"
+d$prob_accident[hb] = d$prob_accident[hb] + 0.01
+
+# Interaction effect between alcohol and cell phones
+h34 = with(d, 3 <= alcohol & distractor == "Cell Phone")
+d[h34, "prob_accident"] = d[h34, "prob_accident"] + 0.05
+
+# Noise
+set.seed(3810)
+d$prob_accident = d$prob_accident + rnorm(nrow(d), sd = 0.008)
+
+with(d,
+interaction.plot(alcohol, distractor, prob_accident)
+)
+```
+
+```{r}
+library(ggplot2)
+g = ggplot(data = d, aes(x = alcohol, y = prob_accident)) +
+  geom_line(aes(color = distractor))
+print(g)
+```
+
+Inputs: day of the week assignment is due, day of the week start assignment
+Output: Grade
+
+Inputs: alcohol, cigarette
+Output: Life expectancy
+
+Categorical ordered: fresh, soph, junior, senior
+unordered: Age ranges: [18 - 27], 
+
+Inputs: time spent outside, smoking, exposure to xrays, 
+Output: Risk of cancer
+
+Input: vacation time, type of job
+Output: Job satisfaction
+
+unordered categorical: gender
+ordered categorical: intensity of exercise
+output: weight loss
+
+ordered: age ranges (0-9], (10-19], etc.
+unordered: ethnicity
+output: probability getting sick
+
+## Office Hours
+
+path separator `\` on Windows.
+```{r}
+```
+
+s = "Hello
+world
+there"
+
+```{r}
+p = "E:/STAT128/128HW/COVID-19_Case_Surveillance_Public_Use_Data.csv"
+```
+
+For file paths on Windows you can use this slash: `/`
+
+Find rows that actually contain `NA`
+
+```{r}
+cna = covid[!complete.cases(covid), ]
+
+d = cna$death_yn
+d == "Missing"
+d
+```
+
+```{r}
+table(covid$age_group, useNA = "always")
+```
+
+Apply the function table to each of the columns.
+
+```{r}
+lapply(covid[, c("age_group", "sex")], table, useNA = "always")
+```
+
+```{r}
+t0 = table(covid$age_group)
+
+# Because I don't know actual population:
+total_pop = rep(0.1, times = 10)
+total_pop[1] = 0.15
+total_pop[9] = 0.05
+total_pop = total_pop * 300e6
+
+proportion_infected = t0 / total_pop
+
+infected_per_100K = proportion_infected * 100e3
+```
+
+```{r}
+count_miss = function(col_data)
+{
+  #keep = is.na(col_data) | col_data == "Unknown" | col_data == "Missing"
+  count = 0
+  for(i in seq_along(col_data))
+  {
+    if(is.na(col_data[i]))                           
+      count = count + 1
+    else {
+      if(col_data[i] == "Unknown")
+      count = count + 1
+      if(col_data[i] == "Missing")
+        count = count + 1
+    }
+  }
+  count   
+}
+```
+
+
+```{r}
+system.time(count_miss(covid$age_group))
+```
+
+
+```{r}
+count_miss(covid$age_group)
+```
+
+```{r}
+system.time(table(covid$age_group, useNA = "always"))
+```
+
+Vectorized:
+```{r}
+count_miss_vec = function(col_data)
+{
+  keep = is.na(col_data) | col_data == "Unknown" | col_data == "Missing"
+  sum(keep)
+}
+```
+
+
+```{r}
+system.time(count_miss_vec(covid$age_group))
+```
+
+
+
+
+
+
+
+
+
+
+
