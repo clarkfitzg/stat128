@@ -184,7 +184,23 @@ system.time(count_miss_vec(covid$age_group))
 ```
 
 
+Some help with the homework.
 
+```{r}
+
+covid = read.csv("~/data/COVID-19_Case_Surveillance_Public_Use_Data.csv")
+
+severity = rep("low", times = nrow(covid))
+severity[covid$hosp_yn == "Yes"] = "hospital"
+severity[covid$icu_yn == "Yes"] = "icu"
+covid$severity = factor(severity, ordered = TRUE, levels = c("low", "hospital", "icu"))
+
+severity = rep(0, times = nrow(covid))
+severity[covid$hosp_yn == "Yes"] = 1
+severity[covid$icu_yn == "Yes"] = 2
+covid$severity = severity
+
+```
 
 
 
