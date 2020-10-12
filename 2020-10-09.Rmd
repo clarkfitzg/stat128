@@ -188,7 +188,9 @@ Some help with the homework.
 
 ```{r}
 
-covid = read.csv("~/data/COVID-19_Case_Surveillance_Public_Use_Data.csv")
+covid = read.csv("~/data/COVID-19_Case_Surveillance_Public_Use_Data.csv", nrows = 2e6)
+
+c2 = covid[covid$age_group != "Unknown", ]
 
 severity = rep("low", times = nrow(covid))
 severity[covid$hosp_yn == "Yes"] = "hospital"
