@@ -7,6 +7,7 @@ date: 18 October 2020
 
 - Define custom functions
 - Split, apply, and combine data
+- Analyze long term simulation results
 
 
 #### Instructions
@@ -14,95 +15,88 @@ date: 18 October 2020
 - Answer the following questions, and show all your R code.
 - Upload your submission to Canvas in nicely formatted HTML generated from Rstudio.
 
-You can use the functions we've developed in class for this 
+You can use the functions we've developed in class for this assignment.
 
 ```{r}
 source("https://raw.githubusercontent.com/clarkfitzg/stat128/master/roulette.R")
 ```
+
+You may also find it helpful to borrow [code from lecture](https://github.com/clarkfitzg/stat128/blob/master/2020-10-12.Rmd).
 
 
 # Questions
 
 ## 1 - Long Term Behavior
 
-_Write a function to produce a detailed 
+_The goal of statistical simulations is to understand the properties and general patterns in random objects.
+One way to uncover these patterns is to do many simulations, until the trend lines in the plots become obvious._
 
-TODO - your answer
+_Write a function to produce a detailed plot similar to the [plot displayed in class](https://github.com/clarkfitzg/stat128/blob/master/long_term_roulette.png) on Monday, October 12th.
+Include the following features:
+- visually important line for median winnings at each time point
+- dashed line for 0.05 and 0.95 quantiles of the winning at each time point
+- several semitransparent lines (set `alpha < 1`) representing actual simulated sequences of winnings for players
+- informative labels, title, and caption_
 
-_b) How many rows and columns do you expect to see based on the website?
-Load the data into R.
-Is this reflected in the data?_
+_The function should return a ggplot object, and accept at least the following arguments:_
 
-```{r}
-# TODO: load data and look at dimensions
-```
+- `strategy`, defaulting to `simple_strategy(even)`, or one of the other 1:1 betting strategies
+- `quants`, defaulting to 0.9, to denote the proportion of the data between the dashed lines
+- `nplayers`, with a default large enough to get reasonably smooth looking dashed quantile lines with the default strategy
+- `nplayers_plot`, defaulting to 10, number of semitransparent lines to plot
+- `ntimes`, with a default sufficiently large to see where the 0.95 quantile intersects 0 with the default strategy
+- `print`, defaulting to `TRUE`, whether to print the final plot
 
-TODO - your answer
-
-
-## 2 - Missing Data
- 
-_There are few `NA` values in this data, but much of the data is missing, unknown, or blank.
-Which columns have the highest proportion of missing data?
-Why might these be missing?_
-
-```{r}
-# TODO
-```
-
-TODO - your answer
-
-
-## 3 - Age Risk
-
-_The [CDC states](https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/older-adults.html) "Among adults, the risk for severe illness from COVID-19 increases with age, with older adults at highest risk."
-Does the data support this claim?_
-
-_Hint 1: It might be useful to think about these COVID illness rates by age after adjusting     for the relative sizes of each age group in the country.
-You'll need to bring in another data source to do this._
-
+_Hint: I suggest you write at least two other functions, one to compute the summary statistics at each time point, and one to do all the plotting based on the simulated data._
 
 ```{r}
 # TODO
 ```
 
-TODO - your answer
-
-
-
-## 4 - Medical Condition Risk
-
-_The [CDC states](https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-with-medical-conditions.html) "People of any age with certain underlying medical conditions are at increased risk for severe illness from COVID-19"
-Does the data support this claim?_
+_Call your function with all the defaults, to make sure it works._
 
 ```{r}
 # TODO
 ```
 
-TODO - your answer
+## 2 - Analysis
 
+Use the function you wrote above to answer the following questions.
 
-## 5 - Interaction Effects
-
-_In statistics, an __interaction effect__ is when two or more variables have a non additive effect in the value of some response.
-In the questions above, we explored the severity of COVID-19 (response) given variables age and medical condition.
-Do age and medical condition have an interaction effect in the severity of COVID-19?_
+_1. What happens when we increase the number of players?_
 
 ```{r}
-# TODO hint: Use interaction.plot
+# TODO show difference when increase players
 ```
 
-TODO - your answer
+TODO explain
 
+_2. Approximately how many times do you need to play before 95% of players have lost money? Explain this result to a person who thinks they can make money gambling._
 
-## 6 - Your Question
+TODO explain
 
-_Come up with your own question about COVID-19, and answer it using this data set.
-You may want to explore other demographic columns: sex, and race / ethnicity.
-You could also look at how the number of cases have changed over time using the report dates._
+_3. What happens when you use a betting strategy that does not have a 1 to 1 payout?_
 
 ```{r}
 # TODO
 ```
 
-TODO - Question and answer
+TODO explain
+
+
+## 3 - Martingale Fails
+
+_Pick your favorite casino and find out the minimum and maximum bet for a Euro roulette table from [Online United States Casino](https://www.onlineunitedstatescasinos.com/las-vegas/games/roulette/).
+Suppose you have 5,000 dollars to spend on gambling, and once you lose that, you cannot play more.
+Given these numbers, use a large number of simulations to answer ONE of the following questions relating to the martingale (doubling) betting strategy with a 1 to 1 payout._
+
+1. On average, how long can you play before going bankrupt?
+2. Does the martingale strategy let you play longer than the simple strategies above?
+3. Suppose a dealer spins the roulette wheel once a minute.
+  If you go to Las Vegas to play for a weekend, what's the probability you will lose all your money?
+  
+```{r}
+# TODO
+```
+
+TODO explain
