@@ -26,17 +26,18 @@ You may also find it helpful to borrow [code from lecture](https://github.com/cl
 
 # Questions
 
-## 1 - Long Term Behavior
+## 1 - A fancy function
 
 _The goal of statistical simulations is to understand the properties and general patterns in random objects.
 One way to uncover these patterns is to do many simulations, until the trend lines in the plots become obvious._
 
 _Write a function to produce a detailed plot similar to the [plot displayed in class](https://github.com/clarkfitzg/stat128/blob/master/long_term_roulette.png) on Monday, October 12th.
-Include the following features:
+Include the following features:_
+
 - visually important line for median winnings at each time point
 - dashed line for 0.05 and 0.95 quantiles of the winning at each time point
 - several semitransparent lines (set `alpha < 1`) representing actual simulated sequences of winnings for players
-- informative labels, title, and caption_
+- informative labels, title, and caption
 
 _The function should return a ggplot object, and accept at least the following arguments:_
 
