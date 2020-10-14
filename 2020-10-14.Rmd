@@ -1,0 +1,249 @@
+
+- Split data, apply functions, and combine results
+
+Announcements:
+
+- Next assignment will be midterm review video.
+- For detailed homework feedback, ask in office hours or Discord
+- Data science panel Friday, thanks for submitting questions
+- Need 2 people to help me try out webinar feature after class today.
+- Homework hint- for the questions on the martingale, it may be easiest to modify the `doublebet` strategy function.
+    Ask me on Discord and I'll help you with this, because we haven't covered control flow like loops and conditional statements.
+
+123 GO - What's the last restaurant you ate at?
+
+Resources:
+
+- [The Split-Apply-Combine Strategy for Data Analysis](https://www.jstatsoft.org/article/view/v040i01) by Hadley Wickham
+
+## Review
+
+Last class we looked again at the roulette simulations.
+
+```{r}
+source("https://raw.githubusercontent.com/clarkfitzg/stat128/master/roulette.R")
+
+set.seed(1380)
+d = play(simple_strategy(even), nplayers = 500L, ntimes = 1000L)
+```
+
+Our eventual goal was to compute a couple summary statistics for every value of time in a specific form, so we wrote a function `summary_at_time` to do this for one particular time.
+
+```{r}
+#' Returns several summary statistics at a particular time
+#'
+#' @param dt data frame with only one distinct time value
+#' @return output: data frame with one row containing columns mean, sd, and time
+summary_at_time = function(dt)
+{
+    time = unique(dt$time)
+    data.frame(time, mean = mean(dt$winnings), sd = sd(dt$winnings))
+}
+```
+
+
+```{r}
+d1 = d[d$time == 1, ]
+summary_at_time(d1)
+
+summary_at_time(d[d$time == 1, ])
+```
+
+Goal: do it for all our times.
+
+```{r}
+s1 = summary_at_time(d[d$time == 1, ])
+s2 = summary_at_time(d[d$time == 2, ])
+s3 = summary_at_time(d[d$time == 3, ])
+s4 = summary_at_time(d[d$time == 4, ])
+s5 = summary_at_time(d[d$time == 5, ])
+```
+This violates DRY.
+
+Recall DRY: "Don't Repeat Yourself"
+
+```{r}
+rbind(s1, s2, s3, s4, s5)
+```
+
+
+How many to do?
+
+```{r}
+length(unique(d$time))
+```
+
+
+## `lapply`
+
+"idiom" - a function or pattern used by people who know what they're doing.
+
+`lapply` means "list apply"
+
+```{r}
+seq(2)
+seq(5)
+seq(10)
+```
+
+Apply the function `seq` to every value from 1 to 5.
+
+```{r}
+l = lapply(1:5, seq)
+l
+```
+123 GO - does it make sense to return this in a data frame?
+
+```{r}
+do.call(data.frame, l)
+```
+
+```{r}
+data.frame(1, 1:2, 1:3)
+```
+
+
+## lists
+
+__list__ is a general purpose data container.
+
+```{r}
+l
+class(l)
+```
+
+Lists can contain anything at all.
+
+```{r}
+l[[2]] = head(letters)
+l
+```
+
+What's good about `lapply` returning a list?
+It's the most general kind of object to return, it doesn't make any assumptions about what your function does.
+
+
+## `split`
+
+We want to split `d`, our big data frame, by the values in `d$time`.
+
+```{r}
+ds = split(d, d$time)
+```
+
+```{r}
+length(ds) == length(unique(d$time))
+
+d539 = ds[[539]]
+
+class(d539)
+head(d539)
+dim(d539)
+```
+
+```{r}
+lapply(head(ds), dim)
+```
+
+123 GO - what's this?
+
+```{r}
+class(ds)
+```
+
+Let's apply our function 
+
+```{r}
+dr = lapply(ds, summary_at_time)
+```
+
+ALWAYS be checking your results
+
+```{r}
+head(dr)
+
+s1
+s2
+s3
+```
+
+```{r}
+rbind(dr[[1]], dr[[2]], dr[[3]], dr[[4]])
+```
+
+
+## Combining
+
+We want to call `rbind`, using the elements of `dr` as arguments
+
+```{r}
+dfinal = do.call(rbind, dr)
+```
+
+```{r}
+dim(dfinal)
+
+head(dfinal)
+tail(dfinal)
+```
+
+
+
+
+
+
+## Putting it all together
+
+`d` contains all our data.
+
+```{r}
+ds = split(d, d$time)
+ds2 = lapply(ds, summary_at_time)
+dfinal = do.call(rbind, ds2)
+```
+
+In the future we'll look at packages data.table and dplyr, they can make this kind of operation simpler and faster.
+The purpose of studying it in detail is to learn the concepts, along with some standard R idioms.
+
+Now we can happily create our plot with ggplot2.
+
+```{r}
+library(ggplot2)
+
+g = ggplot(data = dfinal, mapping = aes(x = time, y = mean)) +
+    geom_line()
+
+print(g)
+```
+
+
+## `lapply` details
+
+`lapply` is roughly equivalent to this code:
+
+`...` is "ellipsis" or "dot-dot-dot" which allows you to pass in more arguments for the function `FUN`.
+
+__higher order function__ is a function that accepts functions as arguments.
+
+```{r}
+lapply_idea = function(X, FUN, ...)
+{
+    result = vector(mode = "list", length = length(X))
+    for(i in seq_along(X)){
+        result[[i]] = FUN(X[[i]], ...)
+    }
+    result
+}
+
+lapply_idea(1:5, mean, na.rm = TRUE)
+```
+
+You might ask, why use `lapply` instead of just a loop then?
+There are a few answers:
+
+1) `lapply` uses less code than the loop, which means less opportunities for bugs.
+2) `lapply` is fast and idiomatic.
+3) `lapply` is easy to make faster through parallel programming.
+
+"Map - Reduce" "Hadoop"
+
