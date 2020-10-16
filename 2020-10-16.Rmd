@@ -1,0 +1,50 @@
+Parameterizing a function- make the function takes some arguments.
+
+```{r}
+x = runif(1000)
+
+#' Compute two quantiles and return them in a data frame.
+#'
+#' @param x numeric vector
+#' @return data frame containing quantiles of x
+df_quantile1 = function(x)
+{
+  qx = quantile(x, probs = c(0.05, 0.95))   # <-- these numbers are hardcoded, not arguments (parameters)
+  data.frame(lower = qx[1], upper = qx[2])
+}
+
+df_quantile1(x)
+  
+```
+
+```{r}
+#' Compute two quantiles and return them in a data frame.
+#'
+#' @param x numeric vector
+#' @param quants fraction of data between upper and lower quantiles
+#' @return data frame containing quantiles of x
+df_quantile2 = function(x, quants = 0.9)
+{
+  #c(0.05, 0.95)
+  lower = (1-quants) / 2
+  probs = c(lower, 1 - lower)
+  qx = quantile(x, probs = probs)
+  data.frame(lower = qx[1], upper = qx[2])
+}
+
+df_quantile2(x)
+```
+
+```
+Final Goal: produce this grand ggplot
+  1 `play` simulates the roulette games for all players (Code already written in roulette.R)
+    1.1 generate roulette rolls
+    1.2 apply strategy function to rolls
+      1.2.1 make whatever bet the strategy calls for
+  2 calculate summary statistics at time from the simulated games
+    2.1 split on time
+    2.2 lapply the one summary statistic function
+      2.2.1 summary at time function
+    2.3 combine results
+  3 produce the ggplot from the summary statistics
+```
