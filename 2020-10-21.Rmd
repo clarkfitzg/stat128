@@ -1,0 +1,219 @@
+
+- Write functions with `for` and `while` loops
+- Know when to write loops, and when to use vectorized functions or `lapply` and related functions
+
+Announcements:
+
+- Midterm review video assignment is live.
+
+123 GO - What movie character would you like to meet?
+
+
+## `for` loops
+
+`for` loops are used to iterate through vectors.
+
+```{r}
+for (i in 1:5) {
+    print(i^2)
+}
+```
+
+```
+for (variable in vector) {
+    #RUN THIS CODE
+}
+```
+
+```{r}
+variable = vector[[1]]
+# RUN THIS CODE
+
+variable = vector[[2]]
+# RUN THIS CODE
+
+...
+
+variable = vector[[length(vector)]]
+# RUN THIS CODE
+```
+
+
+
+## Alternatives to `for` loops
+
+```{r}
+x = c(10, 2, 1, 7)
+
+# Say you want to take log of every element of x
+ans = rep(NA, length(x)) # Preallocation
+for(i in seq_along(x)){
+    ans[i] = log(x[i])
+}
+```
+
+We could use an `apply` function.
+
+Survey (123 GO), which is more clear? The loop, or sapply?
+
+```{r}
+sapply(x, log)
+```
+
+Vectorization loops over each element and applies the function.
+Preferred idiomatic R code, so use it whenever possible.
+
+```{r}
+log(x)
+```
+
+
+
+## When to use loops
+
+Use explicit loops when there is true loop carried data dependence.
+Meaning- what you do in one iteration affects what you do in a future iteration.
+
+123 GO
+What is the argument for the function?
+Suppose I want to calculate the nth fibonacci number.
+
+```{r}
+fib = function(n = 5){
+    a = 0
+    b = 1
+    for(i in seq(n)){
+        apb = a + b # Here we use a and b, which were defined in previous iteration
+        a = b
+        b = apb
+    }
+    b    
+}
+
+fib()
+fib(6)
+fib(7)
+```
+
+
+## `while` loops
+
+```{r}
+n = 0
+while(n < 5){
+    print(n)     # body of the loop
+    n = n + 1
+}
+```
+general form
+
+```{r}
+while(CONDITION IS TRUE){
+    RUN THIS BLOCK
+}
+```
+
+Approximately:
+
+```{r}
+if(CONDITION IS TRUE){
+    RUN THIS BLOCK
+} else if(CONDITION IS TRUE){
+    RUN THIS BLOCK
+} else if(CONDITION IS TRUE){
+    ...
+    Forever
+```
+
+
+## `break` and return
+
+`break` is used to break out of a loop early.
+
+```{r}
+for(i in 1:10){
+    print(i)
+    if(i == 5){
+        break
+    }
+}
+print("all done")
+```
+123 GO- the last number that we see before "all done"
+
+
+
+
+
+
+## Example:
+
+Here's a more compelling example in the context of our roulette martingale example.
+Suppose we would like to look at the histogram of the number of times you can play with this strategy until you're broke.
+
+```{r}
+times_played_until_broke = function(maxplays = 1e4, money = 5000, initialbet = 10){
+    bet = initialbet
+    for(i in seq(maxplays)){
+        win = sample(c(TRUE, FALSE), size = 1, prob = c(18, 19)/37)
+        if(win){
+            money = money + bet
+            bet = initialbet
+        } else {
+            money = money - bet
+            if(money <= 0){
+                # Once we have no money left, there's no need to keep going.
+                break
+                # Alternatively:
+                # return(i)
+            }
+            bet = 2 * bet
+        }
+    }
+    i
+}
+
+times_played_until_broke()
+
+x = replicate(500L, times_played_until_broke())
+
+hist(x)
+```
+
+The way we've written this, the value `10,000` actually means "more than 10,000 plays".
+We can still look at the quantiles to get an idea of how many times we could play like this:
+
+```{r}
+quantile(x)
+```
+
+```{r}
+#' Suppose you want to **return** NA if the player can play more than 10,000 times
+times_played_until_broke2 = function(maxplays = 1e4, money = 5000, initialbet = 10){
+    bet = initialbet
+    for(i in seq(maxplays)){
+        win = sample(c(TRUE, FALSE), size = 1, prob = c(18, 19)/37)
+        if(win){
+            money = money + bet
+            bet = initialbet
+        } else {
+            money = money - bet
+            if(money <= 0){
+                # Once we have no money left, there's no need to keep going.
+                return(i)
+            }
+            bet = 2 * bet
+        }
+    }
+    NA
+}
+
+x2  = replicate(500, times_played_until_broke2())
+
+hist(x2)
+```
+
+
+
+Exercise: Change the above function to use a `while` loop.
+
