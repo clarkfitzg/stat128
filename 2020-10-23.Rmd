@@ -1,0 +1,191 @@
+Outcomes:
+
+- Describe R's type hierarchy
+- Predict behavior from implicit coercion
+
+Announcements:
+
+- Any questions on midterm review video assignment?
+- I've been grading last homework, should have it back to you this weekend.
+- Stay after class if you want to talk cars with me.
+
+123 GO - favorite video game?
+
+
+## classes and types
+
+The `class` of an object describes how it behaves.
+The `type` of an object describes how it is represented.
+Sometimes they're the same in R.
+
+```{r}
+d = Sys.Date()
+d
+```
+
+```{r}
+class(d)
+weekdays(d)
+```
+
+```{r}
+typeof(d)
+```
+
+
+## doubles
+
+What is a "double"?
+Number with decimals, double precision floating point number.
+
+```{r}
+dn = as.numeric(d)
+
+weekdays(d)
+
+#123 GO - does this make any sense?
+weekdays(dn)
+
+class(dn)
+typeof(dn)
+```
+
+```{r}
+typeof(pi)
+```
+
+double precision numbers APPROXIMATE the Real numbers.
+They represent numbers using 64 bits.
+
+This implies:
+- only finitely many. Can't be more than `2^64` distinct numbers.
+
+epsilon- arbitrarily small number that's still greater than 0.
+
+```{r}
+.Machine
+```
+```{r}
+.Machine$double.eps
+```
+
+```{r}
+1 / (2^(53-1))
+```
+
+
+## explicit coercion
+
+```{r}
+paste("hello", "world")
+```
+
+Explicit coercion using as.character
+```{r}
+dc = as.character(d)
+
+typeof(d)
+typeof(dc)
+```
+
+```{r}
+paste("hello", dc)
+```
+
+
+## implicit coercion
+
+123 GO - does this make sense?
+
+```{r}
+paste("hello", d)
+```
+
+
+## type hierarchy
+
+Try to order these in terms of when it makes sense to coerce one type to another.
+
+123 GO - order from most specific, to most general
+
+Common types for vectors:
+
+- logical `TRUE`
+- integer `seq(5)`, `3L`
+- numeric (double) `2.83`
+- character `"hello"`
+
+When we combine two vectors using `c`, what type of vector do we get?
+
+
+## Group activity
+
+Alphabetically, first person's turn to explain where you're at with understanding.
+No expectation to understand fully!
+
+1. Explain what is the type of a literal `NA`, and why?
+
+NA starts as a logical and is coerced to more general types according to the type according to the type hierarchy 
+
+```{r}
+typeof(NA)
+```
+
+```{r}
+nai = c(1L, NA)
+nai[2]
+typeof(nai[2])
+```
+
+```{r}
+nad = c(1.0, NA)
+nad[2]
+typeof(nad[2])
+```
+
+```{r}
+c(1L, as.character(NA))
+```
+
+2. Why are these numbers not equal?
+```{r}
+(0.1 + 0.05) == 0.15
+a = 0.1 + 0.05
+```
+
+There's a very small difference because of the way floating point math works.
+
+```{r}
+a - 0.15
+```
+
+
+2b. Why are these numbers not equal?
+```{r}
+pi == as.numeric(as.character(pi))
+```
+
+3. `identical` checks if objects are exactly the same, in every way.
+Explain the results of these function calls:
+```{r}
+1 == 1.0
+1 == 1L
+identical(1, 1.0)
+identical(1, 1L)
+```
+
+4. What is the type of an object with class `data.frame`, and what does this imply?
+
+```{r}
+typeof(iris)
+```
+
+```{r}
+l = list(1:3, 7)
+```
+
+We can call functions that expect lists as inputs
+
+```{r}
+lapply(iris, class)
+```
