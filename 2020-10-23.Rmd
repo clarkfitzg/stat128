@@ -117,6 +117,10 @@ Common types for vectors:
 
 When we combine two vectors using `c`, what type of vector do we get?
 
+```{r}
+out = c(TRUE, 20L)
+typeof(out)
+```
 
 ## Group activity
 
