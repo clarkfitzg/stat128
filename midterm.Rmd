@@ -46,6 +46,8 @@ close_enough = function(x, y, epsilon = 1e-5)
 
 ## 1
 
+(2 pts)
+
 Use `seq` to create a vector `x` containing the sequence -2.0, -1.9, ..., 4.9, 5.0.
 
 ```{r}
@@ -57,13 +59,15 @@ check(length(x) == 71)
 
 ## 2
 
+(4 pts)
+
 The function `dunif` in R evaluates the probability density function (PDF) for the uniform distribution on the interval from ‘min’ to ‘max’.
 
 - Call `dunif` on `x` to create and plot three lines with different colors on the same graph.
 - Add titles and axis labels as appropriate.
 
 Your plot should include one line for the PDF of a Uniform(0, 1) distribution, one line for the PDF of a Uniform(-1, 2) distribution, and one line for the PDF of a Uniform(0.5, 2.5) distribution.
-Hint: The PDF of a Uniform(a, b) distribution is `dunif(..., min = a, max = b)`.
+Hint: You can compute the PDF of a Uniform(a, b) distribution with `dunif(..., min = a, max = b)`.
 
 ```{r}
 # TODO
@@ -72,7 +76,10 @@ Hint: The PDF of a Uniform(a, b) distribution is `dunif(..., min = a, max = b)`.
 
 ## 3
 
-Define a function `dunif2` that accepts the arguments `x`, `min`, `max`, and behaves exactly like `dunif`.
+(5 pts)
+
+Define and implement a function `dunif2` that accepts the arguments `x`, `min`, `max`, and behaves exactly like `dunif`.
+Don't do `dunif2 = dunif`, that's cheating :)
 Don't worry about the `log` argument to `dunif`.
 
 ```{r}
@@ -90,6 +97,8 @@ check(close_enough(
 
 ## 4
 
+(3 pts)
+
 Define `mtcars2` by selecting the rows of `mtcars` that have `mpg` higher than the median value of `mpg`, and have `cyl` equal to 4.
 
 ```{r}
@@ -100,6 +109,8 @@ check(nrow(mtcars2) == 11)
 
 
 ## 5
+
+(2 pts)
 
 In the following broken code, the goal was to produce a scatter plot of the `mtcars` data frame with `disp` on the x axis, and `mpg` on the y axis, and color determined by `gear`.
 Fix the code so it makes the correct plot.
@@ -112,6 +123,8 @@ Fix the code so it makes the correct plot.
 ```
 
 ## 6
+
+(4 pts)
 
 Suppose you want to know the length of several objects in a list, so you write the following code:
 
@@ -138,6 +151,6 @@ check(close_enough(l_len, l_len2))
 
 Your score below doesn't include parts of the assignment that aren't automatically graded, for example, plots, short answers, and data interpretation.
 
-```{r}
+```{r echo=FALSE}
 sprintf("Auto score:  %i / %i total points", .score$PASS, .score$PASS + .score$FAIL)
 ```
