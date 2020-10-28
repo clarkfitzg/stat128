@@ -1,0 +1,143 @@
+---
+title: Midterm
+date: 1 November 2020
+---
+
+```{r echo=FALSE, results='hide',message=FALSE}
+library(ggplot2)
+
+# Just ignore this code :)
+.score = new.env()
+.score$PASS = 0
+.score$FAIL = 0
+
+#' Check that your answer is correct.
+#'
+#' @param expr expression that should evaluate to TRUE if the answer is correct.
+check = function(expr)
+{
+  status = tryCatch(expr, error = identity)
+  if(isTRUE(status)){
+    .score$PASS = .score$PASS + 1
+    cat("PASS")
+  } else {
+    .score$FAIL = .score$FAIL + 1
+    cat("FAIL")
+  }
+}
+
+#' Check that every element of x and y are "close enough".
+#'
+#' @param x numeric vector
+#' @param y numeric vector
+close_enough = function(x, y, epsilon = 1e-5)
+{
+  max(abs(x - y)) < epsilon
+}
+```
+
+
+#### Instructions
+
+- Leave all the calls to `check()` where they are, and use these to verify that you got the right answer.
+- Answer the following questions, and show all your R code.
+- Upload your submission to Canvas in nicely formatted HTML generated from Rstudio.
+
+
+## 1
+
+Use `seq` to create a vector `x` containing the sequence -2.0, -1.9, ..., 4.9, 5.0.
+
+```{r}
+# TODO
+
+check(x[1] == -2)
+check(length(x) == 71)
+```
+
+## 2
+
+The function `dunif` in R evaluates the probability density function (PDF) for the uniform distribution on the interval from ‘min’ to ‘max’.
+
+- Call `dunif` on `x` to create and plot three lines with different colors on the same graph.
+- Add titles and axis labels as appropriate.
+
+Your plot should include one line for the PDF of a Uniform(0, 1) distribution, one line for the PDF of a Uniform(-1, 2) distribution, and one line for the PDF of a Uniform(0.5, 2.5) distribution.
+Hint: The PDF of a Uniform(a, b) distribution is `dunif(..., min = a, max = b)`.
+
+```{r}
+# TODO
+```
+
+
+## 3
+
+Define a function `dunif2` that accepts the arguments `x`, `min`, `max`, and behaves exactly like `dunif`.
+Don't worry about the `log` argument to `dunif`.
+
+```{r}
+# TODO
+
+x3 = seq(from = -10, to = 10)
+check(close_enough(
+  dunif(x3), dunif2(x3)
+))
+check(close_enough(
+  dunif(x3, min = -0.5, max = 2.5), 
+  dunif2(x3, min = -0.5, max = 2.5)
+))
+```
+
+## 4
+
+Define `mtcars2` by selecting the rows of `mtcars` that have `mpg` higher than the median value of `mpg`, and have `cyl` equal to 4.
+
+```{r}
+# TODO
+
+check(nrow(mtcars2) == 11)
+```
+
+
+## 5
+
+In the following broken code, the goal was to produce a scatter plot of the `mtcars` data frame with `disp` on the x axis, and `mpg` on the y axis, and color determined by `gear`.
+Fix the code so it makes the correct plot.
+
+```{r}
+#g = ggplot(data = mtcars)
+#  geom_line(aes(x = disp, y = mpg), color = gear)
+#
+#print(g)
+```
+
+## 6
+
+Suppose you want to know the length of several objects in a list, so you write the following code:
+
+```{r}
+l = list(letters, LETTERS, 1:10, rnorm(5))
+
+l_len = c(length(l[[1]]), length(l[[2]]), length(l[[3]]), length(l[[4]]))
+```
+
+What is wrong with the above approach to calculating the length of each element?
+
+TODO: explain
+
+Define `l_len2` by computing the lengths of all elements in `l` in an idiomatic way.
+
+```{r}
+# TODO
+
+check(close_enough(l_len, l_len2))
+```
+
+
+## Auto Score
+
+Your score below doesn't include parts of the assignment that aren't automatically graded, for example, plots, short answers, and data interpretation.
+
+```{r}
+sprintf("Auto score:  %i / %i total points", .score$PASS, .score$PASS + .score$FAIL)
+```
