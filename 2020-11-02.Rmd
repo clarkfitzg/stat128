@@ -1,0 +1,188 @@
+Outcomes:
+
+- Explain the idea of linear regression with one numeric variable
+- Extract the coefficients of a linear model produced by `lm` use `coef`
+
+123 GO – What’s your favorite Halloween candy?
+
+Announcements:
+
+- Feel free to stay after today and ask me about any of the midterm questions you missed.
+- Might take up to a week to grade take home part.
+- Zoom annotation tools enabled!
+
+
+## final project
+
+- Open ended- just use something from the class
+- Ideas: dashboard, nice visualization, statistical model, refined data set
+- Show your strengths
+- Show the reader something interesting
+- Groups of 2-3 are OK, but not mandatory
+- Use data set from class, or find your own
+
+Proposal due next week, I'll announce details later.
+
+## Statistical Learning
+
+Who has heard of statistical learning? (supervised) machine learning?
+
+123 GO - Write what it is in 1 sentence.
+
+"A computer evaluating a data set to formulate strategies or ideas to improve some sort of function"
+
+function: maps one or more inputs to an output
+
+Statistical learning infers functions from data.
+
+For example, we want to model y as a function of x
+
+We see the data:
+(y1, x1), (y2, x2), ..., (yn, xn)
+
+f(x1) --> y1
+
+The goal is to learn f.
+
+Why learn f?
+
+- predict future values f(xnew) = ...?
+- learn about the relationship between x and y
+
+Today: 1 dimensional mathematical examples
+
+## Linear models
+
+
+```{r}
+n = 18
+x = runif(n)
+atrue = 1
+btrue = 20
+
+ytrue = atrue*x + btrue  # This is a linear model
+
+plot(x, ytrue)
+lines(range(x), range(ytrue), lty = 2)
+legend("topleft", legend = c("true line"), lty = 2)
+```
+
+Data isn't perfect- there's noise.
+
+```{r}
+noise = rnorm(n)
+y = atrue * x + btrue + noise  # Actually the linear model in statistics, linear regression
+plot(x, y)
+lines(range(x), range(ytrue), lty = 2)
+legend("topleft", legend = c("true line"), lty = 2)
+```
+
+The goal is to infer the true line from the data
+With a linear model we assume the function has this form:
+ 
+$$
+f(x) = ax + b
+$$
+ 
+123 GO: Is there a line that will give us a perfect functional relationship between x and y?
+No.
+ 
+There is a line of *best fit*.
+ 
+
+So the actual model is:
+
+$$
+y = ax + b + \epsilon
+$$
+
+Where ε is some random noise term.
+
+123GO - Should the noise have mean 0?
+Yes.
+
+
+## Optimization
+
+What is fitting the model then?
+Finding "the best" `a` and `b`.
+
+I could just eyeball it and guess.
+
+```{r}
+plot(x, y)
+#lines(range(x), range(ytrue), lty = 2)
+#lines(range(x), 0.5 * range(x) + 19.5, lty = 3)
+#legend("topleft", legend = c("true line"), lty = 2)
+```
+
+
+
+For standard linear regression the goal is to minimize
+
+Objective function: tells us when the fit is good.
+
+$$
+\sum_{i = 1}^n (y_i - (ax_i + b))^2
+$$
+
+Principle of least squares.
+
+If there are at least two distinct xi's, then there is a unique solution to minimize this sum of squares.
+
+
+This pattern is repeated by almost all statistical learning techniques:
+
+1. Specify / constrain the structure of the function
+   `y = ax + b`
+2. Define what you consider a good fit, your objective or loss function to minimize
+    least squares
+3. Estimate the parameters
+    Find a and b to minize loss function.
+
+
+## Application in R
+
+Model y as a function of x
+
+```{r}
+fit = lm(y ~ x)
+fit
+```
+```{r}
+# Extract coefficients from the fit.
+
+# Is this OK?
+# No - this is hardcoding.
+# a = 1.007
+# b = 19.566
+
+coef(fit)
+
+a = coef(fit)["x"]
+b = coef(fit)["(Intercept)"]
+
+
+plot(x, y)
+lines(range(x), a*range(x) + b)
+lines(range(x), range(ytrue), lty = 2)
+legend("topleft", legend = c("estimated", "true line"), lty = 1:2)
+
+```
+
+```{r}
+plot(x, y)
+lines(range(x), a*range(x) + b)
+lines(range(x), range(ytrue), lty = 2)
+legend("topleft", legend = c("estimated", "true line"), lty = 1:2)
+
+x2 = seq(from = 0, to = 1, by = 0.1)
+points(x2, predict(fit, data.frame(x = x2), pch = 2)
+```
+
+
+
+
+
+
+

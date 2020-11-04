@@ -1,0 +1,205 @@
+
+Goal:
+
+- Describe the use cases and ways to select subsets of data
+
+Announcements:
+
+- Take home part of midterm posted
+- Friday (next class) we'll do in class part of midterm
+
+123 GO- What's your animal of the day?
+
+Plan today:
+
+- Review subset data group activity
+- 2nd person in group: Gao, Garrett, Ben, Hunter, Aleksey
+- Demonstrate midterm format
+
+
+## Group activity
+
+Come up with all the ways you know how to select subsets of a vector or data frame.
+We'll do examples with the `mtcars` data set, because cars are on my mind right now. 😁
+We'll take what you come up with and try to make a somewhat comprehensive list of the ways to subset a data frame.
+
+In summary the ways to subset are:
+
+- logical, define a condition
+- index, integers for position
+- name, using character vector of names
+
+123 GO- which one doesn't allow repetition of elements?
+Logical
+
+
+
+# Vectors
+
+```{r}
+x = seq(from = 0, to = 1, by = 0.1)
+x
+```
+
+## logical
+
+```{r}
+x[x < 0.5]
+```
+
+## index
+
+```{r}
+x[c(1, 9, 1, 3)]
+```
+
+## names
+
+123 GO: Can I index `x` with names right now?
+No.
+
+```{r}
+names(x)
+
+seq_along(x)
+
+letters[seq_along(x)]
+
+names(x) = letters[seq_along(x)]
+x
+```
+
+```{r}
+x[c("g", "g", "a")]
+```
+
+
+# Data Frames
+
+```{r}
+head(mtcars)
+```
+
+General form:
+```
+DATA[rows, columns]
+```
+
+## logical
+
+Super useful.
+
+rows with `mpg` greater than 20.
+
+```{r}
+mtcars[20 < mtcars$mpg, ]
+```
+```{r}
+l = 20 < mtcars$mpg
+mtcars[l, ]
+```
+
+`with` function
+
+```{r}
+with(mtcars, mtcars[20 < mpg, ])
+```
+
+`subset` function
+
+```{r}
+subset(mtcars, 20 < mpg)
+```
+
+## index
+
+```{r}
+mtcars[1:10, ]
+```
+
+
+Random sample of rows:
+```{r}
+mtcars[sample(nrow(mtcars), size = 3), ]
+```
+
+Repetition is allowed:
+```{r}
+mtcars[c(1, 2, 1, 9, 1), ]
+```
+
+First 5 rows, first 3 columns:
+```{r}
+mtcars[1:5, 1:3]
+```
+Negative indices.
+Says what to drop.
+
+```{r}
+mtcars[-(1:2), -(3:11)]
+```
+
+## names
+
+Select the column `mpg`
+
+`[` is preferred for programming: 
+
+```{r}
+mtcars[, "mpg"]
+```
+
+Didn't work:
+```{r}
+mtcars[, "mp"]
+```
+
+Convenient for interactive use:
+
+```{r}
+mtcars$mpg
+```
+
+123 GO: Will the line below work?
+Yes, it did work.
+
+```{r}
+mtcars$mp
+```
+
+To select multiple columns by name:
+
+```{r}
+mtcars[, c("mpg", "cyl")]
+```
+
+Can pick rows by names:
+
+```{r}
+mtcars[c("Valiant", "Mazda RX4"), c("hp", "cyl")]
+```
+
+Can combine logical row selection with column selection by name.
+
+```{r}
+mtcars[mtcars$mpg > 20, c("hp", "cyl")]
+```
+
+## splitting
+
+In general, your code should be as direct and readable as possible.
+123 GO, which way is more direct? Most people say mt4.
+
+```{r}
+mt2 = split(mtcars, mtcars$cyl)
+mt3 = mt2[["8"]]
+
+mt4 = mtcars[mtcars$cyl == 8, ]
+```
+mt3 is the same subset as mt4.
+
+
+
+
+
+

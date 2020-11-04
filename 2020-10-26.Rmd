@@ -74,5 +74,6 @@ Base R is generally more flexible
 ```{r}
 plot(1:10)
 lines(c(2, 8), c(3, 9), lty = 2)
+lines(c(2, 8), c(1, 7), lty = 3)
 legend("bottomright", legend = c("first", "second", "third"), lty = 1:3)
 ```

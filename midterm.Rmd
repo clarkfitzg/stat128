@@ -52,6 +52,7 @@ Use `seq` to create a vector `x` containing the sequence -2.0, -1.9, ..., 4.9, 5
 
 ```{r}
 # TODO
+x = seq(from = -2, to = 5, by = 0.1)
 
 check(x[1] == -2)
 check(length(x) == 71)
@@ -70,7 +71,12 @@ Your plot should include one line for the PDF of a Uniform(0, 1) distribution, o
 Hint: You can compute the PDF of a Uniform(a, b) distribution with `dunif(..., min = a, max = b)`.
 
 ```{r}
-# TODO
+d = rbind(data.frame(x, y = dunif(x), dist = "Uniform(0, 1)")
+          , data.frame(x, y = dunif(x, min = -1, max = 2))
+          , data.frame(x, y = dunif(x, min = 0.5, max = 2.5))
+)
+
+
 ```
 
 
@@ -83,7 +89,12 @@ Don't do `dunif2 = dunif`, that's cheating :)
 Don't worry about the `log` argument to `dunif`.
 
 ```{r}
-# TODO
+dunif2 = function(x, min = 0, max = 1)
+{
+  height = 1 / (max - min)
+  inside_interval = (min <= x) & (x <= max)
+  ifelse(inside_interval, height, 0)
+}
 
 x3 = seq(from = -10, to = 10)
 check(close_enough(

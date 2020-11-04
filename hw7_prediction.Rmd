@@ -1,0 +1,75 @@
+---
+title: Prediction
+date: 8 November 2020
+---
+
+#### Outcomes
+
+- Fit statistical learning models to univariate data
+- Plot fitted models
+- Interpret models
+
+
+#### Instructions
+
+- Answer the following questions, and show all your R code.
+- Upload your submission to Canvas in nicely formatted HTML generated from Rstudio.
+
+
+## generating simulated data
+
+Choose `n` between 30 and 200, and sample `n` values for `x` from a random uniform (0, 1) distribution.
+Define `y` corresponding to `x` from the following quadratic function:
+
+  7 y = 5*x^2 - 4*x - 10 + noise
+   
+$$
+y = 5x^2 - 4x - 10 + \epsilon
+$$
+
+Here ε is normally distributed with mean 0 and standard deviation 0.1.
+Plot your data.
+
+```{r}
+set.seed(138)
+
+# TODO
+```
+
+## linear model
+
+Use `lm(y ~ x)` to fit a linear model to the data.
+What mathematical function of `x` does the fitted model represent?
+
+
+## quadratic model
+
+Create a new linear model than includes a quadratic `x^2` term, for example, using `lm(y ~ x + I(x^2))`.
+What mathematical function of `x` does the fitted model represent?
+
+
+## comparing models
+
+Plot lines for the linear and quadratic model together with the data points.
+Which appears to do a better job fitting the data?
+Explain.
+
+
+## recursive partitioning
+
+- Fit a recursive partitioning model to the data using `rpart`.
+- Experiment with the parameters of the algorithm by passing different parameters to the algorithm, see `?rpart.control`.
+- Which parameters appear to make the recursive partitioning model fit better or worse?
+- Plot and compare two different models from `rpart` for this data set.
+
+
+## test data performance
+
+Simulate more values from the true model
+
+$$
+y = 5x^2 - 4x - 10 + \epsilon
+$$
+
+Compare the performance of three different models (linear, quadratic, and recursive partitioning) on this test set.
+Which model does the best job minimizing the sum of squared error?
