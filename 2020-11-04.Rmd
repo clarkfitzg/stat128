@@ -1,0 +1,153 @@
+Outcomes:
+
+- Interpret the results of `predict` on fitted models with old and new data
+- Extend the univariate linear model with computed columns
+
+Announcements:
+
+- I'm teaching a new experimental course "Big Data" next semester, same time, MWF 12.
+
+123 GO- Word of the day?
+
+## linear models using data frames
+
+Usually we fit models to data that starts out in a data frame.
+What follows is essentially what we had yesterday.
+
+```{r}
+n = 1000
+x = sort(runif(n)) # Sorting helps with plotting.
+d = data.frame(x)
+noise = rnorm(n)
+d$ylinear = 10 * x + 2 + noise
+
+
+# Can sorting x change the fit of the model?
+# No
+
+fit1 = lm(ylinear ~ x, data = d)
+
+with(d, plot(x, ylinear))
+lines(d$x, predict(fit1))
+```
+
+Q: Anyone know why I'm sorting my `x` values to start with?
+
+```{r}
+coef(fit1)
+```
+
+True numbers were 2 and 10.
+
+## Prediction
+
+```{r}
+d2 = data.frame(x = seq(from = 0, to =1, by = 0.1))
+d2$yhat = predict(fit1, d2)
+
+# 123 go- what should this plot look like
+with(d2, plot(x, yhat))
+```
+
+
+## Extending the linear model
+
+```{r}
+set.seed(383)
+n = 100
+x = 6*sort(runif(n))
+noise = rnorm(n, sd = 0.2)
+y = 0.5 * x + sin(x) + 6 + noise
+d = data.frame(x, y)
+
+fit_l = lm(y ~ x + sin(x), data = d)
+
+with(d, plot(x, y, xlim = c(0, 10), ylim = c(5, 15)))
+lines(d$x, predict(fit_l), col = "blue")
+```
+
+
+
+## Smoothing Splines
+
+Cubic splines?
+
+Cubic polynomial:
+$$
+f(x) = c_3 x^3 + c_2 x^2 + c_1x + c0
+$$
+
+```{r}
+fit_s = smooth.spline(d)
+ps = predict(fit_s)[["y"]]
+
+x10 = seq(from = 0, to = 10, by = 0.1)
+y10 = predict(fit_s, x10)
+
+with(d, plot(x, y, xlim = c(0, 10), ylim = c(5, 15)))
+#with(d, plot(x, y))
+lines(d$x, predict(fit_l), col = "blue")
+lines(d$x, ps, col = "red", lwd = 2)
+```
+123 GO - which model required more assumptions?
+1. ax + bsin(x) + c
+2. Spline model, requires continuous function
+
+```{r}
+fs = splinefun(d) # spline interpolation
+
+x2 = seq(from = 0, to = 6, length.out = 1000)
+with(d, plot(x, y))
+
+lines(x2, fs(x2))
+
+# The spline function fs overfits the data.
+# It fits the noise. This is bad.
+
+#lines(d$x, predict(fit_l), col = "blue")
+#lines(d$x, ps, col = "red", lwd = 2)
+```
+
+## Spline Interpolation
+
+Interpolation means fitting a function that goes through every single data point.
+
+
+## Group Activity
+
+Part of modeling is evaluating how well a model performs.
+The linear model minimizes the sum of squared error.
+Come up with a function that calculates the mean squared error (MSE) for an `lm` object predicting some new test data.
+That is, if we estimate a linear model given by the function f, then the MSE is the sample mean of `(f(x_i) - y_i)^2`.
+
+```{r}
+#' Calculate the mean squared error of the model on testdata
+#'
+#' @param model fitted model object
+#' @param testdata data frame containing a column y representing the true values to compare the fitted values against
+mse = function(model, testdata)
+{
+}
+```
+
+Here's an example of how you might use such a function:
+
+```{r}
+# Simulate data
+n = 200
+d = data.frame(x = runif(n))
+d$y = 10 * d$x + 2 + rnorm(n)
+
+# Test / train split
+test_index = sample(n, size = round(n/2))
+dtrain = d[test_index, ]
+dtest = d[-test_index, ]
+
+fit = lm(y ~ x, data = dtrain)
+mse(fit, dtest)
+```
+
+
+## Object oriented programming
+
+How does `predict` know what to do?

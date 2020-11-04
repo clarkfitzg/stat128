@@ -177,7 +177,7 @@ lines(range(x), range(ytrue), lty = 2)
 legend("topleft", legend = c("estimated", "true line"), lty = 1:2)
 
 x2 = seq(from = 0, to = 1, by = 0.1)
-points(x2, predict(fit, data.frame(x = x2), pch = 2)
+points(x2, predict(fit, data.frame(x = x2)), pch = 3)
 ```
 
 
