@@ -1,5 +1,5 @@
 ---
-title: Prediction
+title: Predicting a known function
 date: 8 November 2020
 ---
 
