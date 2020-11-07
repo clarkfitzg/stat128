@@ -82,12 +82,12 @@ fit_s = smooth.spline(d)
 ps = predict(fit_s)[["y"]]
 
 x10 = seq(from = 0, to = 10, by = 0.1)
-y10 = predict(fit_s, x10)
+y10 = predict(fit_s, x10)[["y"]]
 
 with(d, plot(x, y, xlim = c(0, 10), ylim = c(5, 15)))
 #with(d, plot(x, y))
 lines(d$x, predict(fit_l), col = "blue")
-lines(d$x, ps, col = "red", lwd = 2)
+lines(x10, y10, col = "red", lwd = 2)
 ```
 123 GO - which model required more assumptions?
 1. ax + bsin(x) + c

@@ -1,0 +1,121 @@
+
+rpart- recursive partitioning and regression trees
+
+- Describe the rpart regression model at a high level
+- Interpret a printed `rpart` object
+
+123 GO – What are you looking forward to this weekend?
+
+References:
+
+"vignette" is a short narrative describing an R package
+
+- [rpart vignette](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf)
+- [regression trees](https://uc-r.github.io/regression_trees) from UCR
+
+
+## objective function
+
+Quick review:
+The linear model says `y = ax + b + noise`.
+
+It minimizes:
+$$
+\sum_{i = 1}^n (y_i - (ax_i + b))^2
+$$
+
+$$
+\sum_{i = 1}^n (y_i - f(x_i))^2
+$$
+$$
+\sum_{i = 1}^n (y_i - c)^2
+$$
+
+The `c = mean(y)`, sample mean minimizes this.
+```{r}
+library(rpart)
+n = 100
+x = sort(runif(n))
+y = rnorm(n)
+y[1:50] = y[1:50] + 20
+plot(x, y)
+
+fit = rpart(y ~ x)
+lines(x, predict(fit))
+```
+
+
+
+
+## piecewise constant
+
+```{r}
+library(rpart)
+
+n = 100
+
+# 123 GO: Does it really matter? No, not really.
+#x = sort(3 * runif(n))
+x = seq(from = 0, to = 3, length.out = n)
+y = rep(2, n)
+y[x < 1] = 1
+y[2 < x] = 3
+noise = rnorm(n, sd = 0.2)
+y = y + noise
+d = data.frame(x, y)
+
+plot(x, y)
+fit = rpart(y~x)
+lines(x, predict(fit))
+
+```
+```{r}
+fit
+```
+
+This model is piecewise constant.
+
+## rpart
+
+## greedy algorithms
+
+To see the parameters for `rpart`:
+
+```{r}
+?rpart.control
+```
+
+## group activity
+
+```{r}
+#' Calculate the mean squared error of the model on testdata
+#'
+#' @param model fitted model object
+#' @param testdata data frame containing a column y representing the true values to compare the fitted values against
+mse = function(model, testdata)
+{
+  yhat = predict(model, testdata) # Rely on predict to do everything specific to the model.
+  y = testdata[, "y"]
+  d2 = (yhat - y)^2
+  mean(d2)
+}
+```
+
+
+```{r}
+# Simulate data
+n = 200
+d = data.frame(x = runif(n))
+d$y = 10 * d$x + 2 + rnorm(n) # True model is a linear model
+
+# Test / train split
+test_index = sample(n, size = round(n/2))
+dtrain = d[test_index, ]
+dtest = d[-test_index, ]
+
+fit = lm(y ~ x, data = dtrain)
+fit2 = rpart(y ~ x, data = dtrain)
+mse(fit, dtest)
+mse(fit2, dtest)
+```
+
