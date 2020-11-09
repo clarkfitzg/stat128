@@ -1,0 +1,166 @@
+
+- Multivariate data
+- Describe the purpose of record identifiers, and why they should be excluded from models
+- Identify patterns in text
+
+123 GO – What’s your word of the day
+
+Announcements:
+
+- No class on Wednesday, Nov. 11th - Veteran's Day
+- Final project proposal due Thursday, will assign today
+
+
+## Computed columns
+
+In the last homework, we did something similar to the following:
+
+```{r}
+n = 100
+x = sort(2.5 * runif(n))
+y = x^2 - 2*x + 7 + rnorm(n, sd = 0.1)
+
+fit1 = lm(y ~ x + I(x^2))
+
+plot(x, y)
+lines(x, predict(fit1), col = "red")
+```
+
+Multivariate data- data frames with multiple columns
+
+```{r}
+d = data.frame(y, x, xsquared = x^2)
+
+# Above- calculated directly in model
+# fit1 = lm(y ~ x + I(x^2))
+# `y ~ .` means model y as a linear function of every other variable in the data frame.
+fit2 = lm(y ~ ., data = d)
+
+plot(x, y)
+lines(x, predict(fit2), col = "blue", lwd = 2)
+```
+```{r}
+fit1
+fit2
+```
+
+
+## City Debt Data
+
+Finance data
+
+The [California DebtWatch](https://data.debtwatch.treasurer.ca.gov/Raw-Data/CDA-ALL-Raw/x7jp-pweb) contains the following information:
+
+> The principal amounts, sale dates, interest rates, terms, purposes, ratings, costs of issuance, financing team participants, issuance documents, and annual reporting (if applicable), among 67 other data points required under California Government Code section 8855, of the various types of debt issued by all state and local government agencies in California.
+
+open government data - I love it!
+
+- track really anything about what the government is doing with the taxpayer's money.
+- great for academic purposes because nothing is private
+
+Suppose you're comparing credit cards, student loans, auto loans, home loans.
+
+Q: What's the most important characteristic of any debt?
+What makes you pick one option over another?
+
+123 GO:
+A: interest rate!
+
+
+## Group Activity
+
+10's of thousands of rows
+68 columns - interest rate is 1.
+Task: predict the interest rate, given others.
+
+3rd person alphabetically in group to share.
+Two questions:
+
+1. Which columns do you think will be important for predicting interest rate, and why?
+
+- Fitch, Moody, S&P rating
+- Maturity Date
+- Principal amount
+- Debt type
+- Presence of trustee
+- Maybe county?
+- Sales date
+
+2. Which columns do you think will not be important, or should be excluded from predicting interest rate?
+
+- CDIAC number
+- Issuer type
+- Underwriter
+- Some Fees
+- sold status
+
+Look at
+
+1. [column descriptions](https://www.treasurer.ca.gov/cdiac/debtdata/database_text.asp)
+2. [raw data](https://data.debtwatch.treasurer.ca.gov/Raw-Data/CDA-ALL-Raw/x7jp-pweb) see bottom of page
+
+
+
+## Record Identifiers
+
+number or string that identifies one observation in a data set.
+
+Q: Consider all the courses at CSUS listed in a course catalog.
+What is the record identifier for this class?
+
+123 GO:
+A: STAT 128-01
+
+Q: What's a record identifier for an individual person in the United States?
+
+123 GO:
+A: social security number / DL
+
+
+Q: What's the row identifier in the above data set?
+A: CDIAC Number
+
+
+Q: What's the purpose of a record identifier?
+A: index to look up the record 
+
+
+Q: Should we use record identifiers for data analysis, say building models?
+
+123 GO:
+A: No!
+They can be a proxy for the date, or something else meaningful.
+
+
+## Identifying patterns in text
+
+For example, suppose we want to find which of the following elements of a character vector contain the string "lease".
+
+```{r}
+debt_type = c("Conduit revenue bond"
+    , "Special assessment bond"
+    , "Certificates of participation/leases"
+    , "Tax allocation Bond"
+)
+
+# grepl("lease", debt_type)
+
+# 123 GO - write sequence: 
+grepl("bond", debt_type)
+```
+
+```{r}
+grepl("bond", debt_type, ignore.case = TRUE)
+```
+
+
+
+## grep backstory
+
+From [Wikipedia's entry on GREP](https://en.wikipedia.org/wiki/Grep):
+
+> grep is a command-line utility for searching plain-text data sets for lines that match a regular expression. Its name comes from the ed command g/re/p (globally search for a regular expression and print matching lines), which has the same effect.[3][4] grep was originally developed for the Unix operating system, but later available for all Unix-like systems and some others such as OS-9.[5]
+
+Original use- data science!
+
+> Thompson wrote the first version in PDP-11 assembly language to help Lee E. McMahon analyze the text of the Federalist Papers to determine authorship of the individual papers.[7]
