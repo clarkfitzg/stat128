@@ -21,45 +21,52 @@ Our goal in this assignment is to predict the interest rate of government debt a
 
 ### Data
 
-The [California DebtWatch](https://data.debtwatch.treasurer.ca.gov/Raw-Data/CDA-ALL-Raw/x7jp-pweb) contains the following information:
+_The [California DebtWatch](https://data.debtwatch.treasurer.ca.gov/Raw-Data/CDA-ALL-Raw/x7jp-pweb) contains the following information:_
 
 > The principal amounts, sale dates, interest rates, terms, purposes, ratings, costs of issuance, financing team participants, issuance documents, and annual reporting (if applicable), among 67 other data points required under California Government Code section 8855, of the various types of debt issued by all state and local government agencies in California.
 
-Download the data in CSV format and load it into R.
+_Download the data in CSV format and load it into R.
 Randomly select 20% of the rows and save them into a test set to use later to evaluate the performance of your model.
-Which column(s) represent interest rate?
+Which column(s) represent interest rate?_
 
 
 ```{r}
 set.seed(280)
 
-#TODO
 ```
 
 
 ### Calculated Columns
 
-Define one or more new columns from existing text columns in the data set.
+_Define one or more new columns from existing text columns in the data set.
 For example, you could add a logical column indicating whether the term "lease" appears in some column.
-Why do you think this new column will help you improve the accuracy of your model?
+Why do you think this new column will help you improve the accuracy of your model?_
 
 ```{r}
-#TODO
+
 ```
 
 
 ### Models
 
-Use the remaining 80% of the data (the training set) to come up with two different models to predict interest rate.
+_Use the remaining 80% of the data (the training set) to come up with two different models to predict interest rate.
 You're welcome to use any external machine learning libraries you like, or you can stick with the `lm` and `rpart` from class.
 Note that you can come up with different models by using different subsets of columns.
 For example, a model with 3 input columns differs from a model with 60 input columns.
-Briefly describe the two models you ended up with.
+Briefly describe the two models you ended up with._
+
+```{r}
+
+```
 
 
 ### Evaluating Performance
 
-Evaluate both of your models on the 20% of the data you reserved for the test set by looking at the average absolute difference between the interest rate predicted by the model and the actual interest rate.
+_Evaluate both of your models on the 20% of the data you reserved for the test set by looking at the average absolute difference between the interest rate predicted by the model and the actual interest rate.
 Do the models do a reasonable job of predicting interest rate?
 Find the rows where the predicted interest rate is farthest from the true interest rate.
-Why might the model have done a poor job on these rows?
+Why might the model have done a poor job on these rows?_
+
+```{r}
+
+```
