@@ -1,0 +1,157 @@
+Outcomes:
+
+- Extract patterns from strings
+- Plot rpart object
+
+123 GO – What’s on your radio most recently?
+
+Announcements:
+
+- STAT 196K is live, see Canvas announcement
+- I look forward to seeing your final projects
+- dashboards (Shiny) starting Monday
+
+Good question / comment on Discord, Aaron:
+
+> @professor fitz For the homework, should we be focusing on predicting the interest rates for NIC and TIC interest types? There are some observations with an interest type of "O" with their interest set to values that aren't just numbers, for example "Fixed @ 3.92%, no TIC/NIC" or "A1 4.68% A2 adj LIBOR plus 2.05%." Are we expected to parse out the percentages from these values, or can we filter these out and just focus on the interest types of NIC/TIC?
+
+Resources:
+
+- The package `stringr` is popular for what we're doing here, and you're welcome to look into it and use it.
+
+
+## Cities data
+
+```{r}
+citydebt = read.csv("~/Downloads/Cities.csv")
+```
+
+suppose I want to find columns with "date" in the name.
+
+```{r}
+grep("date", colnames(citydebt), ignore.case = TRUE, value = TRUE)
+```
+
+
+## grep backstory
+
+From [Wikipedia's entry on GREP](https://en.wikipedia.org/wiki/Grep):
+
+> grep is a command-line utility for searching plain-text data sets for lines that match a regular expression. Its name comes from the ed command g/re/p (globally search for a regular expression and print matching lines), which has the same effect.[3][4] grep was originally developed for the Unix operating system, but later available for all Unix-like systems and some others such as OS-9.[5]
+
+Original use- data science!
+
+> Thompson wrote the first version in PDP-11 assembly language to help Lee E. McMahon analyze the text of the Federalist Papers to determine authorship of the individual papers.[7]
+
+
+## Finding the year in text
+
+How can I extract the year from these columns?
+Let's list all the unique ways we could do it:
+
+TODO: paste these in chat
+123 GO: what strings am I trying to extract from the above character vectors?
+
+```{r}
+
+goal = c("2005", "2002", "2020")
+year = as.numeric(goal)
+
+id = c("2005-1585", "2002-1342", "2020-0115")
+date_s = c("09/28/2005 12:00:00 AM", "07/16/2002 12:00:00 AM", "02/06/2020 12:00:00 AM")
+```
+
+Y2K!!!
+
+activity
+Describe in words an approach to extract the year.
+
+1. `id` select the first four characters
+2. `id` delete the last five characters
+3. `id` select all the numbers that appear between the start of the string and the literal `"-"`
+4. `id` delete everything after the `-`.
+5. `date_s` four numbers beginning with a / and ending with whitespace
+6. `date_s` Find everything between the first whitespace and the last slash before the whitespace.
+7. `date_s` find 4 integers starting with "20".
+8. `date_s` delete everything starting with the whitespace, and then parse them into date objects!
+9. `date_s` parse it into a date / time object and then select the year.
+
+Which is the most robust?
+123 GO: 1-9
+
+## Converting text to calendar date and time
+
+IMHO 9 is the most robust because these dates are machine generated.
+
+```{r}
+d2 = as.POSIXct(date_s, format = "%m/%d/%Y %H:%M:%OS %p")
+class(d2)
+format(d2, "%Y")
+```
+
+
+
+```{r}
+substring(id, 1, 4)
+```
+
+
+
+## Regular expressions are an art
+
+`id` select all the numbers that appear between the start of the string and the literal `"-"`
+
+```{r}
+id = c("2005-1585", "2002-1342", "2020-0115", "20ab-0115")
+m = regexpr("^[0-9]+-", id)
+m
+ydash = regmatches(id, m)
+ydash
+gsub("-", "", ydash)
+```
+
+The regular expression (regex) "^[0-9]+-"
+DSL - domain specific language
+way to match patterns in text
+
+- `^` matches the start of the string
+- `[0-9]` matches any character between... 0 to 9
+- `+` matches 1 or more of the previous character(s)
+- `[0-9]+` matches as many digits as it possibly can
+- `-` for a literal `"-"`
+
+Here are my suggestions for regular expressions:
+
+1. Avoid them when possible.
+    This means don't try to use them for structured data, like the timestamps above.
+2. First write down test cases describing exactly what you do and do not want to match.
+3. Keep them as simple as possible.
+4. Don't worry about performance unless it becomes intolerably slow.
+
+
+
+## Plotting rpart objects
+
+```{r}
+library(rpart)
+
+car2 = mtcars[, c("mpg", "cyl", "disp", "hp")]
+fit = rpart(mpg ~ . , data = car2)
+plot(fit, xlim = c(1, 3), ylim = c(0, 2))
+text(fit)
+```
+
+bootstrapping - take a random sample of the data and compute some statistic.
+
+```{r}
+car2 = mtcars[, c("mpg", "cyl", "disp")]
+lmfit = lm(mpg ~ . , data = car2)
+predict(lmfit, newdata = data.frame(cyl = 4, disp = 120),
+        interval = "confidence", level = 0.95)
+
+predict(lmfit, newdata = data.frame(cyl = 4, disp = 120),
+        interval = "confidence", level = 0.99)
+```
+
+
+
