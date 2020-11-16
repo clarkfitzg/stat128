@@ -1,0 +1,8 @@
+Notes from https://shiny.rstudio.com/tutorial/written-tutorial/lesson4/
+
+- use an *Output function in the ui to place reactive objects in your Shiny app,
+- use a render* function in the server to tell Shiny how to build your objects,
+- surround R expressions by curly braces, {}, in each render* function,
+- save your render* expressions in the output list, with one entry for each reactive object in your app, and
+- create reactivity by including an input value in a render* expression.
+- If you follow these rules, Shiny will automatically make your objects reactive.
