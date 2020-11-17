@@ -6,3 +6,22 @@ Notes from https://shiny.rstudio.com/tutorial/written-tutorial/lesson4/
 - save your render* expressions in the output list, with one entry for each reactive object in your app, and
 - create reactivity by including an input value in a render* expression.
 - If you follow these rules, Shiny will automatically make your objects reactive.
+
+
+test / train split first
+for example:
+
+1)
+80% of data in the training set
+20% of data in the test set
+
+2)
+Pick a model and fit it to the training set
+
+3)
+Check the performance of your model on the test set
+
+
+states:
+CA,NV
+WY,CA,CO
