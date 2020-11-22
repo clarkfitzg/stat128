@@ -1,0 +1,169 @@
+Outcomes:
+
+- Identify side effects in function calls
+- Predict behavior of reference objects in simple functions
+
+123 GO – Did the student review videos improve your understanding?
+Or any comment at all about the videos.
+
+Announcements:
+
+- Turn in last HW (predicting interest) even if you didn't finish
+
+
+## side effects
+
+Functions take an input and produce an output.
+Functions always return a result.
+A __side effect__ in a function call is when the function does something - anything at all - in addition to returning the result.
+
+123 GO - Do the following functions have side effects?
+Yes, no, not sure
+
+1. `1 + 2`                    No
+2a. `hist(1:5)`               Yes - we see the plot
+2b. `hist(1:5, plot = FALSE)` No
+3. `x = 3`                    Yes
+4. `seq(from = 0, to = 10)`   No
+5. `read.csv("data.csv)`      No
+6. `write.csv(iris, "iris.csv")`    Yes
+7. `rnorm(3)`                 Yes
+
+
+## Pure functions
+
+Pure functions don't have side effects, they always the same output for the same input.
+`rnorm` is not pure, because it gives us different outputs.
+functions you study in math are pure functions.
+
+why do we like pure functions?
+
+- Easier to reason about.
+- parallel programming
+
+
+## Motivating question
+
+Consider the following minimal reactive Shiny app.
+When we run this app, the user inputs a number `a`, and then R generates a message saying what the current value of a is.
+
+Should `ui` and `s` be tied together/ always come in a pair?
+Yes.
+```{r}
+ui <- fluidPage(
+  numericInput("a", label = "some number", value = 1)
+  , textOutput("msg")
+)
+
+s <- function(input, output) {
+  
+  output$msg = renderText({
+    paste("the value of a is", input$a)
+  })
+  
+  NULL
+}
+
+shinyApp(ui = ui, server = s)
+```
+
+How and why does the function `s` work?
+
+1. What are the arguments to `s`?
+      `input`, `output`
+2. What does `s` assume about the arguments?
+      `output$msg = ...`, `input$a` can be coerced 
+3. What does `s` return?
+      `NULL`
+4. Based on the reactive behavior of the app, what must be happening to the arguments to `s`?
+      They're being dynamically updated.
+      The arguments to s are __reference objects__
+5. Where is `s` called?    `s()`
+      Must be called somewhere inside shinyApp
+6. Where does the program use `s`?
+      Passing `s` as an argument to `shinyApp`
+7. Does it make sense to use `s` with `ui` different from the one defined above?
+
+
+## Reference Semantics
+
+Suppose we have an object `x`.
+If a function modifies `x` when it is called, and those changes are visible outside of that particular function call, then `x` has __reference semantics__.
+Thus reference semantics are a property of the object, not the function.
+
+Shiny is implemented with reference classes, which have reference semantics, and that's the key to understanding how it all works.
+This reference behavior is uncommon, or else at least well hidden, across the rest of the R world.
+All the standard objects we work with: vectors, data frames, lists, functions, don't have obvious reference semantics.
+
+We can see reference semantics in action by using environments, and compare the behavior to lists.
+
+```{r}
+```
+
+
+## Plotting on homework - prediction
+
+Standard assumptions:
+
+```{r}
+a = 5
+b = 10
+x = seq(from = 0, to = 1, length.out = 1000)
+noise = rnorm(length(x))
+y = a*x + b + noise
+
+fit = lm(y ~ x)
+```
+
+residuals are the difference between what the model predicts and actual value.
+
+```{r}
+r = residuals(fit)
+hist(r)
+```
+
+
+```{r}
+a = 5
+b = 10
+x = seq(from = 0, to = 1, length.out = 1000)
+noise = runif(length(x))
+noise[1:5] = 20
+y2 = a*x + b + noise
+
+fit2 = lm(y2 ~ x)
+```
+
+Prediction on new data:
+
+```{r}
+predict(fit2, data.frame(x = 1:5))
+```
+
+residuals are the difference between what the model predicts and actual value.
+
+```{r}
+r2 = residuals(fit2)
+hist(r2)
+```
+
+Separating into 20% test set
+`mtcars`
+
+```{r}
+n = nrow(mtcars)
+
+test_index = sample(n, size = round(0.2 * n))
+
+test_cars = mtcars[test_index, ]
+train_cars = mtcars[-test_index, ]
+```
+
+
+
+
+
+
+
+
+

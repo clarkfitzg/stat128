@@ -1,0 +1,162 @@
+Goals:
+
+- Simulate data from R's builtin distributions
+- Calculate and graph probability density / mass functions
+
+123 GO – Which class are you most looking forward to next semester?
+
+Announcements:
+
+- This is last homework - Shiny
+- Have early check in on the project
+
+References:
+
+CRAN views- Distributions
+
+- https://cran.r-project.org/web/views/Distributions.html
+
+
+## Stand on the shoulders of giants
+
+If X ~ Poisson(140), then the probability mass function is:
+
+$$
+P(X = k) = e^{-140} \frac{140^k}{k!}
+$$
+
+$$
+P(X = k) = e^{-\lambda} \frac{\lambda^k}{k!}
+$$
+
+Think of Poisson as modeling counts, where the upper bound is unlimited.
+
+We want to calculate P(X = 3)
+
+```{r}
+pmf140 = function(k, lambda = 140)
+{
+  exp(-lambda) * lambda^k / factorial(k)
+}
+
+pmf140(3)
+```
+
+```{r}
+exp(-140)
+```
+
+```{r}
+140^c(143, 144)
+```
+
+```{r}
+k = 130:143
+y = pmf140(k)
+plot(k, y, ylab = "probability mass function")
+```
+
+```{r}
+pmf140(135:143)
+
+pmf140(135:145)
+```
+
+The better way is to use the builtin functions in R
+
+```{r}
+pmf = dpois(135:145, lambda = 140)
+pmf
+plot(pmf)
+```
+```{r}
+# Roll yer own
+pmf140 = function(k, lambda = 140)
+{
+  exp(-lambda) * lambda^k / factorial(k)
+}
+
+# builtin
+dpois(135:145, lambda = 140)
+```
+
+123 go: Why is the builtin way preferred?
+
+The builtin functions have been battle tested and refined for decades
+
+1. Clarity - 
+2. Less code - easier, less opportunity for mistakes
+2. convenience
+3. Robust 
+3. faster
+
+
+
+## R probability function naming conventions
+
+Base R has 4 different probability functions for 16 different distributions, and external packages on CRAN have many more.
+The behavior of the function comes from the prefix.
+
+```{r}
+# prefix suffix
+
+# to generate random data from a normal distribution
+x = rnorm(100)
+hist(x, freq = FALSE)
+
+xx = seq(from = -3, to = 3, length.out = 100)
+dx = dnorm(xx)
+lines(xx, dx, col = "blue", lwd = 3)
+
+```
+
+Prefixes:
+
+- `d` probability density / mass functions
+- `p` probability (cumulative) distribution functions
+- `q` quantile functions
+- `r` random number generation
+
+The distribution comes from the suffix.
+
+Suffixes:
+
+1. `beta` beta
+1. `binom` binomial 
+1. `cauchy` Cauchy 
+1. `chisq` chi-squared 
+1. `exp` exponential 
+1. `f` Fisher F
+1. `gamma` gamma 
+1. `geom` geometric 
+1. `hyper` hypergeometric 
+1. `logis` logistic 
+1. `lnorm` lognormal 
+1. `nbinom` negative binomial 
+1. `norm` normal 
+1. `pois` Poisson 
+1. `t` Student's t
+1. `unif` uniform 
+1. `weibull` Weibull 
+
+
+```{r}
+# prefix suffix
+
+# to generate random data from a normal distribution
+# r is the prefix
+# suffix was norm -> t
+x = rt(100, df = 120)
+hist(x, freq = FALSE)
+
+xx = seq(from = -3, to = 3, length.out = 100)
+# d is the prefix
+# suffix was norm -> t
+dxnorm = dnorm(xx)
+dx = dt(xx, df = 120)
+lines(xx, dx, col = "blue", lwd = 3)
+lines(xx, dxnorm, col = "red", lwd = 2)
+
+```
+
+
