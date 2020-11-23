@@ -20,6 +20,7 @@ ui <- fluidPage(
   # ax + b
   , numericInput("a", label = "slope of the line", value = 1)
   , numericInput("b", label = "intercept", value = 10, max = 20)
+  , withMathJax(helpText("Some math here $$\\alpha+\\beta$$"))
   , textOutput("msg")
   , plotOutput("the_plot_thickens")
 )

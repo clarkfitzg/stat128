@@ -1,7 +1,7 @@
 Goals:
 
-- Simulate data from R's builtin distributions
-- Calculate and graph probability density / mass functions
+- Simulate data from R's builtin distributions  prefix `r<...>` 
+- Calculate and graph probability density / mass functions  `d<...>`
 
 123 GO – Which class are you most looking forward to next semester?
 
@@ -146,17 +146,35 @@ Suffixes:
 # to generate random data from a normal distribution
 # r is the prefix
 # suffix was norm -> t
-x = rt(100, df = 120)
+x = rt(100, df = 10)
 hist(x, freq = FALSE)
 
 xx = seq(from = -3, to = 3, length.out = 100)
 # d is the prefix
 # suffix was norm -> t
 dxnorm = dnorm(xx)
-dx = dt(xx, df = 120)
-lines(xx, dx, col = "blue", lwd = 3)
+dx = dt(xx, df = 10)
+lines(xx, dx, col = "blue", lwd = 3)  #lwd line width
 lines(xx, dxnorm, col = "red", lwd = 2)
 
 ```
+
+## Quantiles
+
+
+```{r}
+q = seq(from = 0.1, to = 0.9, by = 0.1)
+qweibull(q, 0.1)
+```
+
+```{r}
+x = seq(from = 0, to = 2, length.out = 200)
+pdf = dweibull(x, shape = 0.1)
+plot(x, pdf, type = "l")
+```
+
+
+
+
 
 

@@ -1,0 +1,119 @@
+Outcomes:
+
+- Follow standard workflow for prediction problems
+- Develop functions in the course of analysis
+- Plot as you go to check assumptions
+
+Plan: Demonstrate outline of solution to interest prediction assignment and address common mistakes.
+
+123 GO: One thing you are thankful for.
+
+Announcements:
+
+- Course grades look high because you currently see full points for final project.
+- Final project announcement to come soon.
+- Discord - ask questions any time.
+
+
+```{r}
+library(rpart)
+```
+
+
+
+### Test train split
+
+Idea: random partition
+
+
+```{r}
+set.seed(280)
+
+debt = read.csv("~/data/ca_city_debt.csv")
+test_frac = 0.2
+
+n = nrow(debt)
+test_index = sample(n, size = n * test_frac)
+
+test = debt[test_index, ]
+train = debt[-test_index, ]
+```
+
+
+
+### Preprocessing
+
+Getting the data clean enough for us to use.
+
+```{r}
+
+refine = function(d)
+{
+# The column "interest" is my y to predict.
+# Implicit in this coding is that TIC or NIC is **more** important.
+# 123 GO: which one: TIC
+d$interest = d[, "TIC.Interest.Rate"]
+missing = is.na(d$interest)
+d$interest[missing] = d[missing, "NIC.Interest.Rate"]
+
+# New columns:
+d$year = as.integer(substring(d$CDIAC.Number, 1, 4))
+d$bond = grepl("bond", d$Debt.Type, ignore.case = TRUE)
+mi = is.na(d$interest) 
+message("Proportion of interest missing: ", mean(mi))
+d[!mi, c("interest", "year", "bond")]
+}
+
+train2 = refine(train)
+```
+
+Quick visualization:
+
+```{r}
+boxplot(interest ~ bond, train2)
+
+boxplot(interest ~ year, train2)
+```
+
+
+### Models
+
+```{r}
+fit_lm = lm(interest ~ ., train2)
+```
+
+```{r}
+fit_lm
+```
+
+```{r}
+fit_rpart = rpart(interest ~ ., train2)
+```
+
+```{r}
+# library(plot.rpart)
+plot(fit_rpart)
+text(fit_rpart)
+```
+
+
+### Evaluating Performance
+
+`fit_lm` has never seen the data in `test` or `test2`.
+
+```{r}
+test2 = refine(test)
+
+test2$lm_pred = predict(fit_lm, test2)
+
+# Error - how far away prediction was from the actual value
+test2$difference = with(test2, interest - lm_pred)
+
+hist(test2$difference)
+```
+
+
+
+
+
+
