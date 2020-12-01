@@ -1,0 +1,170 @@
+Goals:
+
+- Utility scripting
+- Read, write, rename, and move files in directories
+
+123 GO – One good memory from this Thanksgiving
+
+Announcements:
+
+- Ask me in Discord what you want to cover more for these last two weeks
+- Course evaluations (will talk about after class today)
+
+## File and directory structure
+
+Directories (folders) contain files.
+123 GO: Give an example of a kind of file.
+
+We're often interested in a handful of files:
+
+- `.Rmd` files, R markdown documents
+- `.html` files, reports generated from R markdown
+- `.R` files, R scripts
+- `.csv` files, containing tabular data
+
+Much of data analysis is simply reading, writing, and organizing files.
+Some people call this __utility scripting__.
+It saves you the trouble of doing the same thing over and over again.
+For example, resize every image in a directory.
+
+Computers do repetition better than people do.
+Anyone got any fun examples of doing the same thing over and over manually?
+
+- manually checking prices for baseball cards, camelcamelcamel
+
+Do the machine readable format first, then make the human version.
+
+
+## Working directory
+
+```{r}
+getwd()
+```
+
+look at the files in this directory:
+```{r}
+list.files()
+```
+Change the directory:
+
+```{r}
+setwd("~")
+```
+
+
+## Making new directories.
+
+```{r}
+d = read.csv(text = "language,word
+en,hello
+en,goodbye
+sp,hola
+sp,adios
+kor,안녕")
+```
+
+I want a directory called "languages".
+Want to split this data, and save each language in its own file.
+
+```{r}
+dir.create("languages")
+```
+
+
+## Relative directories
+
+Relative:
+
+```{r}
+list.files("languages")
+```
+
+Absolute:
+
+```{r}
+list.files("/Users/fitzgerald/projects/stat128/languages")
+```
+
+If you have a script to run possibly on different computers, should you use absolute or relative paths?
+123 GO: Relative paths
+
+
+## Writing the files
+
+```{r}
+en = d[d$language == "en", ]
+
+en_file = paste0(en[1, "language"], ".csv")
+
+en_file2 = file.path("languages", en_file)
+
+write.csv(en, en_file2, row.names = FALSE)
+```
+
+
+Let's do all of them:
+
+```{r}
+en = d[d$language == "en", ]
+sp = d[d$language == "sp", ]
+kor = d[d$language == "kor", ]
+...
+```
+
+violates DRY- don't repeat yourself.
+
+Write a function:
+
+```{r}
+en = d[d$language == "en", ]
+
+save_one_language = function(lang)
+{
+  lang_file = paste0(lang[1, "language"], ".csv")
+  lang_file2 = file.path("languages", lang_file)
+  write.csv(lang, lang_file2, row.names = FALSE)
+}
+
+save_one_language(en)
+```
+
+Apply to all languages:
+
+```{r}
+list_of_all_languages = split(d, d$language)
+lapply(list_of_all_languages, save_one_language)
+```
+
+
+## Reading the files in
+
+Goal is to reconstruct `d`.
+
+Not ideal, violates DRY:
+
+```{r}
+en2 = read.csv("languages/en.csv")
+kor2 = read.csv("languages/kor.csv")
+sp2 = read.csv("languages/sp.csv")
+```
+
+```{r}
+lang_files = list.files("languages", full.names = TRUE)
+
+d2 = lapply(lang_files, read.csv)
+
+d2 = do.call(rbind, d2)
+```
+
+Now we have `d`, up to row permutations.
+
+
+
+## Cleaning up
+
+```{r}
+unlink("languages", recursive = TRUE)
+```
+
+BOOM.
+

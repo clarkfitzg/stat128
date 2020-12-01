@@ -92,7 +92,7 @@ fit_rpart = rpart(interest ~ ., train2)
 
 ```{r}
 # library(plot.rpart)
-plot(fit_rpart)
+plot(fit_rpart, xlim = c(0, 7), ylim = c(0.3, 1.5))
 text(fit_rpart)
 ```
 
