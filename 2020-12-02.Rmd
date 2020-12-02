@@ -1,0 +1,117 @@
+
+- Write wrapper functions
+- Debug functions that you write
+
+123 GO – What's one item on your Christmas wish list?
+
+
+## Wrapper functions
+
+Suppose I want to take an existing function and modify it slightly, say by giving the function arguments different defaults.
+For example, `pnorm` calculates the cumulative distribution function for the normal distribution:
+
+```{r}
+x = seq(from = -4, to = 4, by = 0.1)
+
+```
+
+I want to create a function `pnorm2` that behaves just like `pnorm`, but has the default standard deviation (sd) set to 2.
+In other words, `pnorm2(x)` should behave exactly like `pnorm(x, sd = 2)`.
+How can I do this?
+
+
+## Group activity
+
+1. Write a wrapper for `hist` that changes the default title (parameter `main`)to "HISTOGRAM".
+2. List the differences between the functions `extract_interest_rate` and `eir` in 
+
+
+## Debugging
+
+References:
+
+- [Debugging in Advanced R](http://adv-r.had.co.nz/Exceptions-Debugging.html)
+- [Debugging with Rstudio](https://support.rstudio.com/hc/en-us/articles/200713843?version=1.3.1073&mode=desktop)
+
+If you want to be a good software developer, then learn to debug.
+
+What's a bug in software?
+
+Four kinds of bugs:
+
+
+
+
+## Errors
+
+The following function from our course Discord history contains at least one error:
+
+```{r}
+high = function (x)
+{
+    win = (x > 18 = 0) & (!x = 0)
+    ifelse(win, 1, -1)
+}
+
+high(0:36)
+```
+
+When we try to run it, we see a mysterious error: `Error in x > 18 = 0 : could not find function "><-"`.
+This message tells us exactly where the problem is.
+Where is it? 
+The expression `x > 18 = 0`.
+
+
+123 GO - Is this a syntax or a runtime error?
+Runtime, unfortunately.
+
+```{r}
+x = 1:3
+x[1] = 0
+
+# equivalently:
+x = `[<-`(x, 1, 0)
+```
+
+
+
+## Debugging
+
+
+## Write code that's easy to understand
+
+
+```{r}
+#' Extract interest rates from a character vector
+#'
+#' @param x character vector containing text with interest rates
+#' @param pattern regular expression pattern to find the matching interest rates
+#' @return The first numeric interest rate found in the string, or NA if none found
+#' @examples
+#' extract_interest_rate("Fixed @ 3.92%, no TIC/NIC")  # 3.92
+#' extract_interest_rate("123.456 but no adjacent %")  # NA
+extract_interest_rate = function(x, pattern = "[0-9]+\\.[0-9]+\\%")
+{
+    interest = rep(NA, length(x))
+    match_locations = regexpr(pattern, x)
+    match_string = regmatches(x, match_locations)
+    match_number_string = gsub("\\%", "", match_string)
+    match_number = as.numeric(match_number_string)
+    interest[match_locations != -1] = match_number
+    interest
+}
+
+
+eir = function(x, p = "[0-9]+\\.[0-9]+\\%")
+{
+    i = rep(NA, length(x))
+    l = regexpr(p, x)
+    n = as.numeric(gsub("\\%", "", regmatches(x, l)))
+    (i[l != -1] = n)
+}
+```
+
+These 
+What are the differences between these functions?
+
+Which version of this function is easier to read?

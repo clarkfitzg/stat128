@@ -168,3 +168,8 @@ unlink("languages", recursive = TRUE)
 
 BOOM.
 
+```{r}
+
+read.csv("vvre0519sft01.csv", skip = 10)
+
+```
