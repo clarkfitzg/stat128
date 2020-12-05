@@ -1,0 +1,45 @@
+
+- Debug functions that you write
+
+123 GO – Who is one person you appreciate this holiday season?
+
+Announcements:
+
+- The 1st check in assignment for final project is meant to be easy points.
+- Final project highlight: short video or 1 page summary.
+
+
+## Debugging
+
+References:
+
+- Norm Matloff has book on debugging
+- [Debugging in Advanced R](http://adv-r.had.co.nz/Exceptions-Debugging.html)
+- [Debugging with Rstudio](https://support.rstudio.com/hc/en-us/articles/200713843?version=1.3.1073&mode=desktop)
+
+If you want to be a good software developer, then learn to debug.
+
+123 GO:
+What's a bug in software?
+
+
+Four kinds of bugs:
+
+1) Syntax Errors- The code isn't syntactically valid R.
+2) Runtime Errors- the code throws an error in the middle of evaluation.
+3) Code runs, but gives you something obviously incorrect.
+4) Code runs, and everything seems fine, but it's wrong.
+
+123 GO - which are the easiest to fix?
+Syntax errors
+
+Tools for dealing with bugs:
+
+1) Syntax errors: IDE that points to where the problem is.
+2) Enter the debugger when you encounter an error. `options(error = recover)`
+3) Step through the function where something goes wrong. `browser()` or set breakpoints in IDE.
+4) Unit tests, small tests to verify correct behavior.
+  Don't have time to get into these.
+
+
+

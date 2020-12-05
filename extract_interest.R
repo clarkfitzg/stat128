@@ -16,8 +16,10 @@ extract_interest_rate = function(x, pattern = "[0-9]+\\.[0-9]+\\%")
     interest[match_locations != -1] = match_number
     interest
 }
+# ^ verbose
 
 
+# Short version
 eir = function(x, p = "[0-9]+\\.[0-9]+\\%")
 {
     i = rep(NA, length(x))
@@ -25,3 +27,10 @@ eir = function(x, p = "[0-9]+\\.[0-9]+\\%")
     n = as.numeric(gsub("\\%", "", regmatches(x, l)))
     (i[l != -1] = n)
 }
+
+# When in doubt, err on the side of making your code simpler.
+
+
+# 123 GO: Which do you prefer?
+# verbose or short?
+# Most prefer verbose.

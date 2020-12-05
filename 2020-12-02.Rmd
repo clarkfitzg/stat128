@@ -1,6 +1,7 @@
+Goals:
 
 - Write wrapper functions
-- Debug functions that you write
+- Critique different styles of code
 
 123 GO – What's one item on your Christmas wish list?
 
@@ -13,72 +14,98 @@ For example, `pnorm` calculates the cumulative distribution function for the nor
 ```{r}
 x = seq(from = -4, to = 4, by = 0.1)
 
+plot(x, pnorm(x))
+
+lines(x, pnorm(x, sd = 2))
+lines(x, pnorm2(x), col = "red")
 ```
+
 
 I want to create a function `pnorm2` that behaves just like `pnorm`, but has the default standard deviation (sd) set to 2.
 In other words, `pnorm2(x)` should behave exactly like `pnorm(x, sd = 2)`.
 How can I do this?
 
+```{r}
+pnorm2 = function(x)
+{
+    pnorm(x, sd = 2)
+}
+```
+
+123 GO: can we change sd in a call to pnorm2?
+No- 2 is hardcoded in, can't change it.
+
+123 GO: Is there any point in having pnorm2, if we have pnorm3?
+No, pnorm3 is more flexible.
+
+123 GO: Is it possible to specify `lower.tail = FALSE` in a call to pnorm3?
+No.
+
+```{r}
+pnorm3 = function(x, sd = 2)
+{
+    pnorm(x, sd = sd)
+}
+
+plot(x, pnorm3(x))
+```
+
+```{r}
+pnorm4 = function(x, sd = 2, lower.tail = TRUE)
+{
+    pnorm(x, sd = sd, lower.tail = lower.tail)
+}
+
+plot(x, pnorm4(x))
+```
+
+What happens when `pnorm` gets a *new* argument, `fast = TRUE`.
+123GO: Is it possible to use this new argument?
+No. Not without changing `pnorm5`.
+
+General principle for programming: Do as little as possible.
+
+```{r}
+pnorm5 = function(x, mean = 0, sd = 2, lower.tail = TRUE, log.p = FALSE, fast = TRUE)
+{
+    pnorm(x, mean = mean, sd = sd, lower.tail = lower.tail, log.p = log.p)
+}
+
+plot(x, pnorm5(x))
+```
+
+`...` called ellipses.
+"Syntactic sugar" pretty way to express something in a programming language.
+
+```{r}
+pnorm6 = function(..., sd = 2)
+{
+    pnorm(..., sd = sd) # <--- 
+}
+
+plot(x, pnorm6(x, lower.tail = FALSE))
+```
+
+```{r}
+pnorm7 = function(..., sd = 2)
+{
+    args = list(...)
+    #browser() # STOP the R interpreter right here, so that I can look around
+    print(paste("mean is ", args$mean))
+    pnorm(..., sd = sd) # <--- 
+}
+
+pnorm7(x, lower.tail = FALSE, mean = 3)
+```
+
 
 ## Group activity
 
-1. Write a wrapper for `hist` that changes the default title (parameter `main`)to "HISTOGRAM".
-2. List the differences between the functions `extract_interest_rate` and `eir` in 
+10 minutes
 
-
-## Debugging
-
-References:
-
-- [Debugging in Advanced R](http://adv-r.had.co.nz/Exceptions-Debugging.html)
-- [Debugging with Rstudio](https://support.rstudio.com/hc/en-us/articles/200713843?version=1.3.1073&mode=desktop)
-
-If you want to be a good software developer, then learn to debug.
-
-What's a bug in software?
-
-Four kinds of bugs:
-
-
-
-
-## Errors
-
-The following function from our course Discord history contains at least one error:
-
-```{r}
-high = function (x)
-{
-    win = (x > 18 = 0) & (!x = 0)
-    ifelse(win, 1, -1)
-}
-
-high(0:36)
-```
-
-When we try to run it, we see a mysterious error: `Error in x > 18 = 0 : could not find function "><-"`.
-This message tells us exactly where the problem is.
-Where is it? 
-The expression `x > 18 = 0`.
-
-
-123 GO - Is this a syntax or a runtime error?
-Runtime, unfortunately.
-
-```{r}
-x = 1:3
-x[1] = 0
-
-# equivalently:
-x = `[<-`(x, 1, 0)
-```
-
-
-
-## Debugging
-
-
-## Write code that's easy to understand
+1. Write a wrapper for `hist` that changes the default title (parameter `main`) to "HISTOGRAM".
+2. List the differences between the functions `extract_interest_rate` and `eir` in https://github.com/clarkfitzg/stat128/blob/master/extract_interest.R
+Which do you prefer, and why?
 
 
 ```{r}
@@ -111,7 +138,8 @@ eir = function(x, p = "[0-9]+\\.[0-9]+\\%")
 }
 ```
 
-These 
 What are the differences between these functions?
 
 Which version of this function is easier to read?
+
+Which version will be easier to debug?
