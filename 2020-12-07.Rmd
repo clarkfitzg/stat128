@@ -1,0 +1,196 @@
+```{r}
+library(ggplot2)
+```
+
+Outcomes:
+
+- Use `::` and `:::` to find objects in a namespace
+- Predict which object will be found based on search paths
+- object oriented programming - Define new methods for generic functions like `plot`
+
+123 GO – What are you going to do when finals are over?
+
+Announcements:
+
+- next class Q&A on final project and review for final
+    Bring questions.
+- would you be interested in working with a real company on a NodeJS / SQL project?
+    would you pay $50 for such an experience?
+    [Riipen](https://www.riipen.com/)
+
+
+## The search path
+
+When we start a fresh R session, there are no objects in our global workspace.
+We can check with `ls`, list objects.
+
+```{r}
+ls()
+x = 10
+```
+
+R finds objects by looking through packages in a particular order.
+That order is called the __search path__, and we can inspect it with `search()`.
+
+```{r}
+search()
+```
+
+Every time R encounters an object name it looks through the search path to find that object.
+
+
+Suppose we define our own `ls` function.
+
+```{r}
+ls = function(...){
+    "Hmmm- is this a good idea?"
+}
+```
+
+123 GO: What will happen?
+
+```{r}
+ls()
+```
+
+
+We can use `::`, the namespace operator, to pick out an object from a namespace.
+
+```{r}
+# package::object_name
+base::ls()
+
+ls = base::ls
+ls()
+```
+
+
+123 GO: What do you think will happen to my search path after attaching a package with `library`?
+
+```{r}
+search()
+library(ggplot2)
+library(MASS)
+search()
+```
+
+How can an "object not found" error happen?
+
+
+
+## How does `plot` work?
+
+Set up:
+
+```{r}
+x = 1:10
+y = x + rnorm(length(x))
+h = hist(x, plot = FALSE)
+fit = lm(y ~ x)
+```
+
+The function `plot` behaves differently depending on what kind of arguments we pass into it.
+
+```{r}
+par(mfrow = c(2, 2))
+plot(x)
+plot(x, y)
+plot(h)
+plot(fit, which = 1)
+```
+
+What's going on?
+There must be a lot of code in `plot` to handle all of these different cases, right?
+We can look at it, just print the function out:
+
+```{r}
+
+```
+
+
+S3 object oriented system
+S4 is a more sophisticated, safter system
+
+The entire `plot` function is just a single function call: `UseMethod("plot")`.
+`plot` is called a __generic__ function.
+The actual implementation happens in the plotting methods, namely:
+
+- `plot.default`
+- `graphics::plot.function`
+- `graphics:::plot.histogram`
+- `stats:::plot.lm`
+
+```{r}
+class(x)
+class(h)
+class(fit)
+```
+
+In contrast to `::`, the `:::` "triple colon" picks out objects which are not exported from packages.
+These objects are not exported by design- everything works fine without them.
+You shouldn't use `:::` in your own code, but it's useful to understand where the objects are, and for debugging.
+
+Let's look at the class of `x`, `h`, and `fit` to see what's going on.
+
+```{r}
+class(x)
+class(h)
+class(fit)
+```
+
+R's S3 object oriented system simply dispatches on the class of the object.
+For example:
+
+```{r}
+plot(h)
+
+graphics:::plot.histogram(h)
+```
+
+In other words, `plot` does the right thing when we pass in an object with class `histogram`.
+This is one style of object oriented programming.
+
+123 GO: Why is this behavior useful?
+
+- easier to use because you don't need to remember many function names
+- Makes for simpler code
+- Dynamic coding- same generic function can work and do the right thing for many different arguments
+
+
+## Extending
+
+We can extend this system by defining our own methods.
+For example, suppose we want to attach units to a numeric vector, say seconds.
+There are packages to do this, so this is just an example.
+
+Here's a direct way to create an object with a new class.
+Usually, we would write a constructor function, but one step at a time.
+
+```{r}
+x = 1:10
+class(x) = c("units", class(x))
+attr(x, "units") = "seconds"
+class(x)
+
+attr(x, "units")
+```
+
+
+Our method definition sets the x label based on the units, and then calls the next method.
+
+
+```{r}
+plot.units = function(x, y, xlab = attr(x, "units"), ...){
+   # xlab = attr(x, "units")
+   NextMethod(xlab = xlab) 
+}
+```
+
+`NextMethod` calls the next method for `plot` with all the same arguments, except with a new default for `xlab`.
+How and why `NextMethod` works is a more advanced topic.
+
+```{r}
+y = rnorm(length(x))
+plot(x, y, xlab = "SEC")
+```
+

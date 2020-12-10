@@ -1,0 +1,92 @@
+Outcomes:
+
+- Merge two data frames that share a common column
+
+123 GO – What's your word of the day?
+
+Announcements:
+
+- Submit final project highlight separately from final project on Sunday.
+- Evaluate this course.
+
+To review:
+
+- barplots ggplot `+ geom_bar`
+
+```{r}
+library(ggplot2)
+
+people = read.csv(text = "name,country,height
+Clark,US,73
+Jen,US,65
+Sara,Mexico,54
+Antonio,Honduras,56
+Alexander,Russia,70
+Sofia,Russia,68")
+
+#g = ggplot(data = people, mapping = aes(x = name, y = height)) + geom_bar()
+#g = ggplot(data = people, mapping = aes(x = name, y = height)) + geom_bar(stat = identity)
+g = ggplot(data = people, mapping = aes(x = name, y = height)) + geom_col(aes(fill = country))
+#g = ggplot(data = people, mapping = aes(x = name, y = height)) + geom_point() # Works
+print(g)
+```
+
+
+- constructing data frames from csv file `read.csv`
+
+```{r}
+# Round trip from data frame -> CSV -> data frame
+getwd()
+#write.csv(iris, "iris.csv")
+i2 = read.csv("iris.csv")
+i3 = read.csv("iris.csv", skip = 4)
+```
+
+
+## Merging
+
+Suppose I know which country a person is from, and I want to greet them using a greeting based on the language of their country.
+If we had a column representing the greeting for each person, then we could just use `paste`.
+
+```{r}
+
+country = read.csv(text = "country,language
+US,English
+Russia,Russian
+Mexico,Spanish
+Honduras,Spanish")
+
+greeting = read.csv(text = "language,greeting
+English,hello
+Spanish,hola
+Korean,안녕
+Russian,Здравствуйте")
+```
+
+merge country and greeting on the language column
+merge people with country on the country column
+
+```{r}
+country_greeting = merge(country, greeting)
+
+pcg = merge(people, country_greeting)
+
+paste("Clark", "hello")
+
+# 123 GO: what will this produce?
+paste(pcg$name, "hello")
+
+paste(pcg$name, pcg$greeting)
+```
+
+
+## Nested data
+
+JSON, XML
+
+```{r}
+x = list(a = 1:5, b = "hello",
+         c = list(6:10, list(letters[2:4], pi))
+         )
+```
+
