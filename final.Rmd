@@ -15,7 +15,7 @@ date: 16 December 2020
 Define a function `plot_red` as a wrapper function to `plot` that changes the default color to red (`col = "red"`).
 
 ```{r}
-plot_red(1:10)
+#plot_red(1:10)
 ```
 
 
@@ -48,6 +48,11 @@ Read all of these files in and combine them into one single data frame, `d`.
 If you do it correctly, `d` will have 30 rows.
 You can do this idiomatically in three lines of code.
 
+```{r, echo=FALSE, results='hide',message=FALSE}
+# Cleaning up, leave this as the last line
+unlink("letters_for_stat128_final", recursive = TRUE)
+```
+
 
 ## 4
 
@@ -71,9 +76,10 @@ Hint: use `cat()`.
 s = "This is it?"
 class(s) = c("final", class(s))
 
+s
 ```
 
-Here's the behavior you should see after you define your method:
+Here's the behavior you should see in the console after you define your method:
 
 ```
 > s
