@@ -90,3 +90,25 @@ x = list(a = 1:5, b = "hello",
          )
 ```
 
+## Defining a new vector
+
+based on the output of `grepl`.
+
+```{r}
+
+input = strsplit("Hillary campaign fund, Trump campaign fund, Romney campaign fund, Sanders campaign fund, Hillary and Trump weekend getaway", split = ", ")[[1]]
+
+output = rep("Other", length(input))
+
+for(term in c("Hillary", "Trump", "Romney")){
+    found = grepl(term, input)
+    output[found] = term
+}
+
+output
+# [1] "Hillary" "Trump"   "Romney"  "Other"   "Trump"
+
+
+```
+
+
