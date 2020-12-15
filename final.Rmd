@@ -48,6 +48,13 @@ Read all of these files in and combine them into one single data frame, `d`.
 If you do it correctly, `d` will have 30 rows.
 You can do this idiomatically in three lines of code.
 
+```{r}
+datadir = "letters_for_stat128_final"
+
+# TODO- read in data
+```
+
+
 ```{r, echo=FALSE, results='hide',message=FALSE}
 # Cleaning up, leave this as the last line
 unlink("letters_for_stat128_final", recursive = TRUE)
